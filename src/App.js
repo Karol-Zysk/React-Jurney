@@ -10,7 +10,7 @@ export const center = { lat: 48, lng: 3 };
 
 function App() {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyDqRcN_cWjTfqXSD2pke_QaCwg5PJmKQPA",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
   });
 
