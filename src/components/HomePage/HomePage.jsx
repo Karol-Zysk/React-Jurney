@@ -17,9 +17,7 @@ const HomePage = ({
   originRef,
   destinationRef,
   calculateRoute,
-  
   clearRoute,
-  map,
 }) => {
   return (
     <Container>

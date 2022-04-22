@@ -1,9 +1,17 @@
-import React from "react";
+import { useState } from "react";
 import { GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api";
-import { Container } from "./MapPage.styles";
+import {
+  Container,
+  ExportWrapper,
+  InfoContainer,
+  PdfIcon,
+  TextWrapper,
+  Title,
+  TitleWrapper,
+} from "./MapPage.styles";
 import { center } from "../../App";
-import { Flex, HStack, IconButton, Text } from "@chakra-ui/react";
-import { FaLocationArrow } from "react-icons/fa";
+import { Button, IconButton } from "@chakra-ui/react";
+import { FiMinimize2, FiMaximize2 } from "react-icons/fi";
 
 const MapPage = ({
   map,
@@ -14,6 +22,8 @@ const MapPage = ({
   origin,
   destination,
 }) => {
+  const [minimize, setMinimize] = useState(false);
+
   return (
     <Container>
       <GoogleMap
@@ -33,31 +43,34 @@ const MapPage = ({
           <DirectionsRenderer directions={directionResponse} />
         )}
       </GoogleMap>
-      <Flex
-        background="rgba(255,255,255,0.7)"
-        spacing={4}
-        mt={4}
-        position="absolute"
-        left={0}
-        top={0}
-        flexDirection="column"
-      >
-        <h2>
-          Your journey from {origin} to {destination} will take you about{" "}
-          {duration}.
-        </h2>
-        <h2> You will cover the distance of {distance} </h2>
+      <InfoContainer minimize={minimize}>
+        <TitleWrapper minimize={minimize}>
+          <Title minimize={minimize}>Jurney Info</Title>
+          <IconButton
+            aria-label="center back"
+            icon={minimize ? <FiMinimize2 /> : <FiMaximize2 />}
+            border="1px solid grey"
+            onClick={() => setMinimize(!minimize)}
+          />
+        </TitleWrapper>
+        <TextWrapper minimize={minimize}>
+          <p>
+            Your journey from {origin} to {destination} will take you about{" "}
+            {duration}.
+          </p>
+          <p> You will cover the distance of {distance} </p>
 
-        <h2> With the current gasoline price of ${parseInt(distance) / 100}</h2>
-        <h2> and an average fuel consumption of 5l / 100km,</h2>
-        <h2> the journey will cost you {parseInt(origin) * 5}..</h2>
-        <IconButton
-          aria-label="center back"
-          icon={<FaLocationArrow />}
-          isRound
-          onClick={() => map.panTo(center)}
-        />
-      </Flex>
+          <p> With the current gasoline price of ${parseInt(distance) / 100}</p>
+          <p> and an average fuel consumption of 5l / 100km,</p>
+          <p> the journey will cost you {parseInt(origin) * 5}..</p>
+        </TextWrapper>
+        <ExportWrapper minimize={minimize}>
+          <Button colorScheme="red" onClick={() => map.panTo(center)}>
+            Export to
+            <PdfIcon />
+          </Button>
+        </ExportWrapper>
+      </InfoContainer>
     </Container>
   );
 };

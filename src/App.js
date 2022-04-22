@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { SkeletonText } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import { useJsApiLoader } from "@react-google-maps/api";
 import Navbar from "./components/Navbar/Navbar";
 import MapPage from "./components/MapPage/MapPage";
@@ -27,7 +27,7 @@ function App() {
   const destinationRef = useRef();
 
   if (!isLoaded) {
-    return <SkeletonText>Loading...</SkeletonText>;
+    return <Spinner>Loading...</Spinner>;
   }
 
   const calculateRoute = async () => {
