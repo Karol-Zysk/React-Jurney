@@ -29,7 +29,7 @@ function App() {
   const [routesStorage, setRoutesStorage] = useState("");
 
   useEffect(() => {
-    setRoutesStorage(JSON.parse(localStorage.getItem("route")) || []);
+    setRoutesStorage(JSON.parse(localStorage.getItem("route")).reverse() || []);
   }, [directionResponse]);
 
   /**@type React.MutableRefObject<HTMLInputElement>*/

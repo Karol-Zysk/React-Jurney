@@ -21,7 +21,7 @@ const HomePage = ({
   notAvaliable,
   routesStorage,
 }) => {
-// Filling inputs when History tab clicked
+  // Filling inputs when History tab clicked
   const setHistoryHandler = (route) => {
     originRef.current.value = route.origin;
     destinationRef.current.value = route.destination;

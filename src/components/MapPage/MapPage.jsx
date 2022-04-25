@@ -49,7 +49,7 @@ const MapPage = ({
       doc.text(`Jurney will cost you about: ${Math.round(cost)} $`, 15, 78);
     }
     // doc.text(`Duration: ${durationtxt}`, 12, 54);
-    doc.save("a4.pdf");
+    doc.output("dataurlnewwindow");
   };
 
   const distanceKM = distance / 1000;
