@@ -6,28 +6,36 @@ import MapPage from "./components/MapPage/MapPage";
 import HomePage from "./components/HomePage/HomePage";
 import { Container } from "./App.style";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import NotFound from "./components/NotFound/NotFound";
 
 export const center = { lat: 48, lng: 3 };
 
 function App() {
-  let navigate = useNavigate();
+  //PERFORMANCE ERROR PREVENTION
+  const [libraries] = useState(["places"]);
+  //CONNECTION WITH GOOGLE MAPS API
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-    libraries: ["places"],
+    libraries,
   });
 
+  let navigate = useNavigate();
+  //SETTING MAP FOR GOOGLEMAP COMPONENT
   const [map, setMap] = useState(/** @type google.maps.GoogleMap*/ (null));
+
+  //SETTING GOOGLEMAP DIRECTION RESULTS
   const [directionResponse, setDirectionResponse] = useState(null);
   const [duration, setDuration] = useState("");
   const [durationtxt, setDurationTxt] = useState("");
   const [distance, setDistance] = useState("");
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
+
+  //ERROR HANDLING STATE
   const [emptyInput, setEmptyInput] = useState(false);
   const [incorrectInput, setIncorrectInput] = useState(false);
   const [notAvaliable, setNotAvaliable] = useState(false);
   const [routesStorage, setRoutesStorage] = useState([]);
-  const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
     setRoutesStorage(JSON.parse(localStorage.getItem("route")) || []);
@@ -110,9 +118,9 @@ function App() {
       }
       if (results) {
         storeRoutes();
-        setAnimation(true);
+        
         setTimeout(() => {
-          setAnimation(false);
+          
           navigate("/map");
         }, 2000);
       }
@@ -155,7 +163,7 @@ function App() {
                 calculateRoute={calculateRoute}
                 clearRoute={clearRoute}
                 map={map}
-                animation={animation}
+                
               />
             }
           />
@@ -174,6 +182,7 @@ function App() {
               />
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
     </>

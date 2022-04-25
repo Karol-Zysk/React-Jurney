@@ -70,8 +70,8 @@ export const RightTitle = styled.div`
 export const SearchIco = styled(FaSearchLocation)`
   position: absolute;
   animation: orbit 2s infinite linear 0s forwards;
-  animation-play-state: ${({ animationState }) =>
-    animationState ? "running" : "paused"};
+  animation-play-state: ${({ animation }) =>
+    animation ? "running" : "paused"};
   right: -25px;
 
   @keyframes orbit {

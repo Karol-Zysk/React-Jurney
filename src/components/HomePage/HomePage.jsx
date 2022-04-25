@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Container,
   ErrorMsgBtnContainer,
@@ -32,13 +33,22 @@ const HomePage = ({
   emptyInput,
   notAvaliable,
   routesStorage,
-  animation,
 }) => {
+  const [animation, setAnimation] = useState(false);
+
   // Filling inputs when History tab clicked
   const setHistoryHandler = (route) => {
     originRef.current.value = route.origin;
     destinationRef.current.value = route.destination;
   };
+  const animationHandler = () => {
+    setAnimation(true);
+    setTimeout(() => {
+      setAnimation(false);
+    }, 3000);
+  };
+
+        
 
   return (
     <Container>
@@ -103,9 +113,15 @@ const HomePage = ({
             )}
             <div></div>
             <ButtonGroup alignSelf="flex-end" justifySelf="flex-end">
-              <Button colorScheme="pink" type="submit" onClick={calculateRoute}>
-                Calculate Route
-              </Button>
+              <div onClick={animationHandler}>
+                <Button
+                  colorScheme="pink"
+                  type="submit"
+                  onClick={calculateRoute}
+                >
+                  Calculate Route
+                </Button>
+              </div>
               <IconButton
                 aria-label="center back"
                 icon={<FaTimes />}
@@ -154,7 +170,7 @@ const HomePage = ({
       </Left>
       <Right>
         <RightTitle>
-          <p>Find Your Path</p> <SearchIco animationState={animation} />
+          <p>Find Your Path</p> <SearchIco animation={animation ? 1 : 0} />
         </RightTitle>
         <Image src={place} />
       </Right>
