@@ -99,9 +99,10 @@ const HomePage = ({
         <Title>
           <h1>History</h1>
         </Title>
-        {routesStorage.slice(0, 5).map((route) => {
+        {routesStorage.slice(0, 5).map((route, index) => {
           return (
             <Route
+              key={index}
               onClick={() => {
                 setHistoryHandler(route);
               }}

@@ -26,10 +26,10 @@ function App() {
   const [emptyInput, setEmptyInput] = useState(false);
   const [incorrectInput, setIncorrectInput] = useState(false);
   const [notAvaliable, setNotAvaliable] = useState(false);
-  const [routesStorage, setRoutesStorage] = useState("");
+  const [routesStorage, setRoutesStorage] = useState([]);
 
   useEffect(() => {
-    setRoutesStorage(JSON.parse(localStorage.getItem("route")).reverse() || []);
+    setRoutesStorage(JSON.parse(localStorage.getItem("route")) || []);
   }, [directionResponse]);
 
   /**@type React.MutableRefObject<HTMLInputElement>*/
@@ -74,7 +74,10 @@ function App() {
       object
     );
 
-    window.localStorage.setItem("route", JSON.stringify(storageArr) || []);
+    window.localStorage.setItem(
+      "route",
+      JSON.stringify(storageArr.reverse()) || []
+    );
   };
 
   const calculateRoute = async () => {
