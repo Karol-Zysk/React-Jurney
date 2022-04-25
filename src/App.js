@@ -30,7 +30,7 @@ function App() {
 
   useEffect(() => {
     setRoutesStorage(JSON.parse(localStorage.getItem("route")) || []);
-  }, [directionResponse]);
+  }, [directionResponse, navigate]);
 
   /**@type React.MutableRefObject<HTMLInputElement>*/
   const originRef = useRef();

@@ -85,38 +85,40 @@ const HomePage = ({
           </HStack>
         )}
       </Box>
-      <Box
-        display="flex"
-        flexDirection="column"
-        p={4}
-        borderRadius="lg"
-        mt={4}
-        bgColor="white"
-        shadow="base"
-        minW="40%"
-        zIndex="0"
-      >
-        <Title>
-          <h1>History</h1>
-        </Title>
-        {routesStorage.slice(0, 5).map((route, index) => {
-          return (
-            <Route
-              key={index}
-              onClick={() => {
-                setHistoryHandler(route);
-              }}
-            >
-              <Place>
-                <p>Origin: {route.origin}</p>
-              </Place>
-              <Place>
-                <p>Direction: {route.destination}</p>
-              </Place>
-            </Route>
-          );
-        })}
-      </Box>
+      {routesStorage !== [] && (
+        <Box
+          display="flex"
+          flexDirection="column"
+          p={4}
+          borderRadius="lg"
+          mt={4}
+          bgColor="white"
+          shadow="base"
+          minW="40%"
+          zIndex="0"
+        >
+          <Title>
+            <h1>History</h1>
+          </Title>
+          {routesStorage.slice(0, 5).map((route, index) => {
+            return (
+              <Route
+                key={index}
+                onClick={() => {
+                  setHistoryHandler(route);
+                }}
+              >
+                <Place>
+                  <p>Origin: {route.origin}</p>
+                </Place>
+                <Place>
+                  <p>Direction: {route.destination}</p>
+                </Place>
+              </Route>
+            );
+          })}
+        </Box>
+      )}
     </Container>
   );
 };
