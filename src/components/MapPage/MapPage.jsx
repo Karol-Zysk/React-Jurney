@@ -10,19 +10,49 @@ import {
   TitleWrapper,
 } from "./MapPage.styles";
 import { center } from "../../App";
-import { Button, IconButton } from "@chakra-ui/react";
+import { Button, HStack, IconButton, Input } from "@chakra-ui/react";
 import { FiMinimize2, FiMaximize2 } from "react-icons/fi";
+import { jsPDF } from "jspdf";
 
 const MapPage = ({
-  map,
   setMap,
   directionResponse,
   distance,
-  duration,
   origin,
   destination,
+  durationtxt,
 }) => {
   const [minimize, setMinimize] = useState(false);
+  const [consumption, setConsumption] = useState("");
+  const [fuelPrice, setFuelPrice] = useState("");
+
+  const cost = ((fuelPrice * consumption) / 100) * parseInt(distance / 1000);
+
+  const createPdfHandler = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text(`Jurney Info`, 15, 20);
+    doc.setFontSize(12);
+    doc.text(`From: ${origin}`, 15, 30);
+    doc.text(`To: ${destination}`, 15, 38);
+    doc.text(`Distance: ${Math.round(distanceKM)}km`, 15, 46);
+    doc.text(
+      `Assuming you cover 800km a day, the journey will take: ${Math.ceil(
+        distance / 800000
+      )} days`,
+      15,
+      54
+    );
+    if (fuelPrice !== "" && consumption !== "") {
+      doc.text(`Fuel Price: ${fuelPrice}$ / litre`, 15, 62);
+      doc.text(`Average fuel consumption: ${consumption}l / 100km`, 15, 70);
+      doc.text(`Jurney will cost you about: ${Math.round(cost)} $`, 15, 78);
+    }
+    // doc.text(`Duration: ${durationtxt}`, 12, 54);
+    doc.save("a4.pdf");
+  };
+
+  const distanceKM = distance / 1000;
 
   return (
     <Container>
@@ -43,34 +73,69 @@ const MapPage = ({
           <DirectionsRenderer directions={directionResponse} />
         )}
       </GoogleMap>
-      <InfoContainer minimize={minimize}>
-        <TitleWrapper minimize={minimize}>
-          <Title minimize={minimize}>Jurney Info</Title>
-          <IconButton
-            aria-label="center back"
-            icon={minimize ? <FiMinimize2 /> : <FiMaximize2 />}
-            border="1px solid grey"
-            onClick={() => setMinimize(!minimize)}
-          />
-        </TitleWrapper>
-        <TextWrapper minimize={minimize}>
-          <p>
-            Your journey from {origin} to {destination} will take you about{" "}
-            {duration}.
-          </p>
-          <p> You will cover the distance of {distance} </p>
+      {directionResponse && (
+        <InfoContainer minimize={minimize}>
+          <TitleWrapper minimize={minimize}>
+            <Title minimize={minimize}>Jurney Info</Title>
+            <IconButton
+              aria-label="center back"
+              icon={minimize ? <FiMinimize2 /> : <FiMaximize2 />}
+              border="1px solid grey"
+              onClick={() => setMinimize(!minimize)}
+            />
+          </TitleWrapper>
+          {minimize && (
+            <HStack spacing={4} marginBottom="25px">
+              <Input
+                type="number"
+                size="sm"
+                borderColor="rgba(0,0,255,0.5)"
+                _placeholder={{ color: "inherit" }}
+                borderRadius="8px"
+                value={fuelPrice}
+                onChange={(e) => setFuelPrice(e.target.value)}
+                placeholder="Fuel Price"
+              />
 
-          <p> With the current gasoline price of ${parseInt(distance) / 100}</p>
-          <p> and an average fuel consumption of 5l / 100km,</p>
-          <p> the journey will cost you {parseInt(origin) * 5}..</p>
-        </TextWrapper>
-        <ExportWrapper minimize={minimize}>
-          <Button colorScheme="red" onClick={() => map.panTo(center)}>
-            Export to
-            <PdfIcon />
-          </Button>
-        </ExportWrapper>
-      </InfoContainer>
+              <Input
+                type="number"
+                borderColor="rgba(0,0,255,0.5)"
+                borderRadius="8px"
+                _placeholder={{ color: "inherit" }}
+                size="sm"
+                value={consumption}
+                onChange={(e) => setConsumption(e.target.value)}
+                placeholder="Consumption / 100km"
+                marginInlineStart="0"
+              />
+            </HStack>
+          )}
+          <TextWrapper minimize={minimize}>
+            <p>From: {origin}</p>
+            <p>To: {destination}</p>
+            <p>Distance: {Math.round(distanceKM)}km</p>
+            <p>Duration: {durationtxt}</p>
+            <p>
+              Assuming you cover 800km a day, the journey will take:{" "}
+              {Math.ceil(distance / 800000)} days{" "}
+            </p>
+
+            {fuelPrice !== "" && consumption !== "" ? (
+              <>
+                <p>Fuel Price: {fuelPrice}$ / litre</p>
+                <p>Average fuel consumption: {consumption}l / 100km</p>
+                <p>Jurney will cost you about: {Math.round(cost)}$</p>
+              </>
+            ) : null}
+          </TextWrapper>
+          <ExportWrapper minimize={minimize}>
+            <Button colorScheme="red" onClick={createPdfHandler}>
+              Export to
+              <PdfIcon />
+            </Button>
+          </ExportWrapper>
+        </InfoContainer>
+      )}
     </Container>
   );
 };

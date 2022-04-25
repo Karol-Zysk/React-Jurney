@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { FaRegFilePdf } from "react-icons/fa";
 
 export const Container = styled.div`
-  height: 80vh;
+  height: 85vh;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -21,11 +21,11 @@ export const InfoContainer = styled.div`
   margin: 15px;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.85);
   position: absolute;
   left: 0;
   top: 0;
-  max-width: 25%;
+  max-width: 30%;
   border-radius: 15px;
 `;
 export const TitleWrapper = styled.div`
