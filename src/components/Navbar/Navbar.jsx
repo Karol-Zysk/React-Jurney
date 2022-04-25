@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Box, Flex, Text, Stack } from "@chakra-ui/react";
+import { Box, Flex, Text, Stack, Container } from "@chakra-ui/react";
 
 import Logo from "./Logo";
 
@@ -48,13 +48,11 @@ const MenuToggle = ({ toggle, isOpen }) => {
   );
 };
 
-const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
+const MenuItem = ({ children, isLast, ...rest }) => {
   return (
-    <Link to="/">
-      <Text display="block" {...rest} margin="0px 15px">
-        {children}
-      </Text>
-    </Link>
+    <Text display="block" {...rest} margin="0px 15px">
+      {children}
+    </Text>
   );
 };
 
@@ -68,8 +66,8 @@ const MenuLinks = ({ isOpen }) => {
         spacing={8}
         marginRight="20px"
         align="center"
-        justify={["center", "space-between", "flex-end", "flex-end"]}
-        direction={["column", "row", "row", "row"]}
+        justify={["center", "center", "flex-end", "flex-end"]}
+        direction={["column", "column", "row", "row"]}
         pt={[4, 4, 0, 0]}
         fontWeight="bold"
       >
@@ -93,8 +91,9 @@ const NavBarContainer = ({ children, ...props }) => {
       wrap="wrap"
       w="100%"
       display="flex"
-      h="15vh"
-      bg="blue"
+      h={{ base: "auto", md: "12vh" }}
+      bg="#00B0FF"
+      padding="15px"
       color={["white", "white", "primary.700", "primary.700"]}
       {...props}
     >

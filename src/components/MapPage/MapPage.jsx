@@ -13,6 +13,7 @@ import { center } from "../../App";
 import { Button, HStack, IconButton, Input } from "@chakra-ui/react";
 import { FiMinimize2, FiMaximize2 } from "react-icons/fi";
 import { jsPDF } from "jspdf";
+import img from "../../img/map.png";
 
 const MapPage = ({
   setMap,
@@ -29,26 +30,27 @@ const MapPage = ({
   const cost = ((fuelPrice * consumption) / 100) * parseInt(distance / 1000);
 
   const createPdfHandler = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text(`Jurney Info`, 15, 20);
-    doc.setFontSize(12);
-    doc.text(`From: ${origin}`, 15, 30);
-    doc.text(`To: ${destination}`, 15, 38);
-    doc.text(`Distance: ${Math.round(distanceKM)}km`, 15, 46);
+    const doc = new jsPDF("landscape", "px", "a5", "false");
+    doc.addImage(img, "PNG", 220, 0, 230, 250);
+    doc.setFont("Helvertica");
+    doc.setFontSize(28);
+    doc.text(`Jurney Info`, 25, 40);
+    doc.setFontSize(14);
+    doc.text(`From: ${origin}`, 25, 75);
+    doc.text(`To: ${destination}`, 25, 95);
+    doc.text(`Distance: ${Math.round(distanceKM)}km`, 25, 115);
+    doc.text(`Assuming you cover 800km a day,`, 25, 135);
     doc.text(
-      `Assuming you cover 800km a day, the journey will take: ${Math.ceil(
-        distance / 800000
-      )} days`,
-      15,
-      54
+      `the journey will take: ${Math.ceil(distance / 800000)} days`,
+      25,
+      155
     );
     if (fuelPrice !== "" && consumption !== "") {
-      doc.text(`Fuel Price: ${fuelPrice}$ / litre`, 15, 62);
-      doc.text(`Average fuel consumption: ${consumption}l / 100km`, 15, 70);
-      doc.text(`Jurney will cost you about: ${Math.round(cost)} $`, 15, 78);
+      doc.text(`Fuel Price: ${fuelPrice}$ / litre`, 25, 175);
+      doc.text(`Average fuel consumption: ${consumption}l / 100km`, 25, 195);
+      doc.text(`Jurney will cost you about: ${Math.round(cost)} $`, 25, 215);
     }
-    // doc.text(`Duration: ${durationtxt}`, 12, 54);
+
     doc.output("dataurlnewwindow");
   };
 

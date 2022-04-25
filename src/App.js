@@ -27,6 +27,7 @@ function App() {
   const [incorrectInput, setIncorrectInput] = useState(false);
   const [notAvaliable, setNotAvaliable] = useState(false);
   const [routesStorage, setRoutesStorage] = useState([]);
+  const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
     setRoutesStorage(JSON.parse(localStorage.getItem("route")) || []);
@@ -96,16 +97,24 @@ function App() {
         // eslint-disable-next-line no-undef
         travelMode: google.maps.TravelMode.DRIVING,
       });
-
-      setOrigin(originRef.current.value);
-      setDestination(destinationRef.current.value);
-      setDirectionResponse(results);
-      setDistance(results.routes[0].legs[0].distance.value);
-      setDuration(results.routes[0].legs[0].duration.value);
-      setDurationTxt(results.routes[0].legs[0].duration.text);
+      if (originRef.current.value === destinationRef.current.value) {
+        incorrectInputAlert();
+        return;
+      } else {
+        setOrigin(originRef.current.value);
+        setDestination(destinationRef.current.value);
+        setDirectionResponse(results);
+        setDistance(results.routes[0].legs[0].distance.value);
+        setDuration(results.routes[0].legs[0].duration.value);
+        setDurationTxt(results.routes[0].legs[0].duration.text);
+      }
       if (results) {
         storeRoutes();
-        navigate("/map");
+        setAnimation(true);
+        setTimeout(() => {
+          setAnimation(false);
+          navigate("/map");
+        }, 2000);
       }
     } catch (error) {
       if (error.code === "NOT_FOUND") {
@@ -146,6 +155,7 @@ function App() {
                 calculateRoute={calculateRoute}
                 clearRoute={clearRoute}
                 map={map}
+                animation={animation}
               />
             }
           />

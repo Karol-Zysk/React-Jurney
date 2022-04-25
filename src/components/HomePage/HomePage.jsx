@@ -1,7 +1,19 @@
-import { Container, Place, Route, Title } from "./HomePage.styles";
-import { FaTimes } from "react-icons/fa";
+import {
+  Container,
+  ErrorMsgBtnContainer,
+  ErrorText,
+  Image,
+  Left,
+  Place,
+  Right,
+  RightTitle,
+  Route,
+  SearchIco,
+  Title,
+} from "./HomePage.styles";
+import { FaTimes, FaExclamation, FaSearchLocation } from "react-icons/fa";
 import { Autocomplete } from "@react-google-maps/api";
-
+import place from "../../img/place.svg";
 import {
   Box,
   Button,
@@ -20,6 +32,7 @@ const HomePage = ({
   emptyInput,
   notAvaliable,
   routesStorage,
+  animation,
 }) => {
   // Filling inputs when History tab clicked
   const setHistoryHandler = (route) => {
@@ -29,63 +42,7 @@ const HomePage = ({
 
   return (
     <Container>
-      <Box
-        display="flex"
-        flexDirection="column"
-        p={4}
-        borderRadius="lg"
-        mt={4}
-        bgColor="white"
-        shadow="base"
-        minW="auto"
-        zIndex="0"
-      >
-        <HStack spacing={4} marginBottom="15px">
-          <Autocomplete>
-            <Input
-              type="text"
-              placeholder="Origin"
-              _placeholder={{ color: "inherit" }}
-              ref={originRef}
-            />
-          </Autocomplete>
-          <Autocomplete>
-            <Input
-              type="text"
-              _placeholder={{ color: "inherit" }}
-              placeholder="Destination"
-              ref={destinationRef}
-            />
-          </Autocomplete>
-        </HStack>
-
-        <ButtonGroup alignSelf="flex-end">
-          <Button colorScheme="pink" type="submit" onClick={calculateRoute}>
-            Calculate Route
-          </Button>
-          <IconButton
-            aria-label="center back"
-            icon={<FaTimes />}
-            onClick={clearRoute}
-          />
-        </ButtonGroup>
-        {emptyInput && (
-          <HStack>
-            <h1>Direction Inputs Cannot Be Empty</h1>
-          </HStack>
-        )}
-        {incorrectInput && (
-          <HStack>
-            <h1>Incorrect Input Value</h1>
-          </HStack>
-        )}
-        {notAvaliable && (
-          <HStack>
-            <h1>Your Car Can't Fly or Swim</h1>
-          </HStack>
-        )}
-      </Box>
-      {routesStorage !== [] && (
+      <Left>
         <Box
           display="flex"
           flexDirection="column"
@@ -94,31 +51,113 @@ const HomePage = ({
           mt={4}
           bgColor="white"
           shadow="base"
-          minW="40%"
+          boxShadow="1px 2px 4px #00B0FF"
+          minW="auto"
+          maxW="90%"
           zIndex="0"
         >
-          <Title>
-            <h1>History</h1>
-          </Title>
-          {routesStorage.slice(0, 5).map((route, index) => {
-            return (
-              <Route
-                key={index}
-                onClick={() => {
-                  setHistoryHandler(route);
-                }}
-              >
-                <Place>
-                  <p>Origin: {route.origin}</p>
-                </Place>
-                <Place>
-                  <p>Direction: {route.destination}</p>
-                </Place>
-              </Route>
-            );
-          })}
+          <HStack spacing={4} marginBottom="15px">
+            <Autocomplete>
+              <Input
+                boxShadow="1px 1px 1px #00B0FF"
+                type="text"
+                placeholder="Origin"
+                _placeholder={{ color: "inherit" }}
+                ref={originRef}
+              />
+            </Autocomplete>
+            <Autocomplete>
+              <Input
+                type="text"
+                boxShadow="1px 1px 1px #00B0FF"
+                _placeholder={{ color: "inherit" }}
+                placeholder="Destination"
+                ref={destinationRef}
+              />
+            </Autocomplete>
+          </HStack>
+          <ErrorMsgBtnContainer>
+            {emptyInput && (
+              <HStack>
+                <ErrorText>
+                  Direction Inputs Cannot Be Empty
+                  <FaExclamation />
+                </ErrorText>
+              </HStack>
+            )}
+            {incorrectInput && (
+              <HStack>
+                <ErrorText>
+                  Incorrect Input Value
+                  <FaExclamation />
+                </ErrorText>
+              </HStack>
+            )}
+            {notAvaliable && (
+              <HStack>
+                <ErrorText>
+                  Your Car Can't Fly or Swim
+                  <FaExclamation />
+                </ErrorText>
+              </HStack>
+            )}
+            <div></div>
+            <ButtonGroup alignSelf="flex-end" justifySelf="flex-end">
+              <Button colorScheme="pink" type="submit" onClick={calculateRoute}>
+                Calculate Route
+              </Button>
+              <IconButton
+                aria-label="center back"
+                icon={<FaTimes />}
+                onClick={clearRoute}
+              />
+            </ButtonGroup>
+          </ErrorMsgBtnContainer>
         </Box>
-      )}
+        {routesStorage.length !== 0 && (
+          <Box
+            display="flex"
+            flexDirection="column"
+            p={4}
+            borderRadius="lg"
+            mt={4}
+            bgColor="white"
+            shadow="base"
+            minW="auto"
+            maxW="90%"
+            zIndex="0"
+            boxShadow="2px 2px 3px #00B0FF"
+          >
+            <Title>
+              <h1>Search History</h1>
+              <FaSearchLocation />
+            </Title>
+            {routesStorage.slice(0, 5).map((route, index) => {
+              return (
+                <Route
+                  key={index}
+                  onClick={() => {
+                    setHistoryHandler(route);
+                  }}
+                >
+                  <Place>
+                    <p>Origin: {route.origin}</p>
+                  </Place>
+                  <Place>
+                    <p>Direction: {route.destination}</p>
+                  </Place>
+                </Route>
+              );
+            })}
+          </Box>
+        )}
+      </Left>
+      <Right>
+        <RightTitle>
+          <p>Find Your Path</p> <SearchIco animationState={animation} />
+        </RightTitle>
+        <Image src={place} />
+      </Right>
     </Container>
   );
 };
