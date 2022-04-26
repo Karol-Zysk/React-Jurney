@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import {
   Container,
   ErrorMsgBtnContainer,
@@ -12,11 +12,7 @@ import {
   SearchIco,
   Title,
 } from "./HomePage.styles";
-import {
-  FaTimes,
-  FaSearchLocation,
-  FaMapMarkedAlt,
-} from "react-icons/fa";
+import { FaTimes, FaSearchLocation, FaMapMarkedAlt } from "react-icons/fa";
 import { Autocomplete } from "@react-google-maps/api";
 import place from "../../img/place.svg";
 import {
@@ -163,8 +159,10 @@ const HomePage = ({
         )}
       </Left>
       <Right>
+        <SearchIco animation={animation ? 1 : 0} />
         <RightTitle>
-          <p>Find Your Path</p> <SearchIco animation={animation ? 1 : 0} />
+          <p>Find Your Path</p>
+          <FaSearchLocation />
         </RightTitle>
         <Image src={place} />
       </Right>

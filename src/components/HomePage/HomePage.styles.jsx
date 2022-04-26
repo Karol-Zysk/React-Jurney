@@ -46,7 +46,8 @@ export const Right = styled.div`
   width: 45%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  position: relative;
+  padding-top: 5vh;
   align-items: center;
   order: 1;
   @media screen and (max-width: 768px) {
@@ -57,43 +58,50 @@ export const Right = styled.div`
 
 export const RightTitle = styled.div`
   font-size: 40px;
-  width: 50%;
+  width: 100%;
   font-weight: bold;
   color: rgba(0, 176, 255, 0.7);
-  margin-bottom: 35px;
+  margin-bottom: 45px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
-  @media screen and (max-width: 468px) {
-    width: 60%;
-  }
-  p {
-    margin-right: 20px;
-    font-size: 30px;
-    @media screen and (max-width: 768px) {
-      font-size: 26px;
-    }
 
-    @media screen and (max-width: 468px) {
-      font-size: 24px;
+  p {
+    margin-right: 15px;
+    font-size: 32px;
+    @media screen and (max-width: 630px) {
+      font-size: 26px;
     }
   }
 `;
 
 export const SearchIco = styled(FaSearchLocation)`
   position: absolute;
-  animation: orbit 3s linear 0s forwards infinite;
+  animation: orbit 2s linear 0s forwards infinite;
   animation-play-state: ${({ animation }) =>
     animation ? "running" : "paused"};
-  right: 0;
+  display: ${({ animation }) => (animation ? "block" : "none")};
+  font-size: 120px;
+  font-weight: bold;
+  color: rgba(0, 176, 255, 0.7);
+  top: 40%;
+  left: 40%;
+  z-index: 10;
+  transform: translate(-10%, -50%);
+  @media screen and (max-width: 968px) {
+    font-size: 96px;
+  }
+  @media screen and (max-width: 560px) {
+    font-size: 72px;
+  }
 
   @keyframes orbit {
     from {
-      transform: rotate(0deg) translateX(15px) rotate(0deg);
+      transform: rotate(0deg) translateX(70px) rotate(0deg);
     }
     to {
-      transform: rotate(360deg) translateX(15px) rotate(-360deg);
+      transform: rotate(360deg) translateX(70px) rotate(-360deg);
     }
   }
 `;
