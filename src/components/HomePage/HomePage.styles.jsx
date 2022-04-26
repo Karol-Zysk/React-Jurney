@@ -37,6 +37,9 @@ export const ErrorText = styled.div`
   justify-content: center;
   align-items: center;
   color: crimson;
+  @media screen and (max-width: 768px) {
+    font-size: 10px;
+  }
 `;
 
 export const Right = styled.div`
@@ -54,25 +57,36 @@ export const Right = styled.div`
 
 export const RightTitle = styled.div`
   font-size: 40px;
+  width: 50%;
   font-weight: bold;
-  color: rgba(0, 176, 255, 0.5);
+  color: rgba(0, 176, 255, 0.7);
   margin-bottom: 35px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
+  @media screen and (max-width: 468px) {
+    width: 60%;
+  }
   p {
-    margin-right: 10px;
+    margin-right: 20px;
     font-size: 30px;
+    @media screen and (max-width: 768px) {
+      font-size: 26px;
+    }
+
+    @media screen and (max-width: 468px) {
+      font-size: 24px;
+    }
   }
 `;
 
 export const SearchIco = styled(FaSearchLocation)`
   position: absolute;
-  animation: orbit 2s infinite linear 0s forwards;
+  animation: orbit 3s linear 0s forwards infinite;
   animation-play-state: ${({ animation }) =>
     animation ? "running" : "paused"};
-  right: -25px;
+  right: 0;
 
   @keyframes orbit {
     from {
@@ -104,8 +118,16 @@ export const Title = styled.div`
   font-size: 20px;
   margin-bottom: 15px;
   border-bottom: rgba(0, 176, 255, 0.5);
+  color: rgba(0, 0, 0, 0.7);
   h1 {
-    margin-right: 10px;
+    margin-right: 20px;
+    @media screen and (max-width: 768px) {
+      font-size: 18px;
+    }
+    margin-right: 20px;
+    @media screen and (max-width: 468px) {
+      font-size: 16px;
+    }
   }
 `;
 
@@ -139,5 +161,8 @@ export const Place = styled.div`
 
   p {
     font-size: 14px;
+    @media screen and (max-width: 768px) {
+      font-size: 12px;
+    }
   }
 `;

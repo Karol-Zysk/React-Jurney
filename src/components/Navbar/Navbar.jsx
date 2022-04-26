@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Box, Flex, Text, Stack, Container } from "@chakra-ui/react";
+import { Box, Flex, Text, Stack, } from "@chakra-ui/react";
 
 import Logo from "./Logo";
 
@@ -72,7 +72,7 @@ const MenuLinks = ({ isOpen }) => {
         fontWeight="bold"
       >
         <MenuItem>
-          <Link to="/">Set The Route</Link>
+          <Link to="/">Set Route</Link>
         </MenuItem>
         <MenuItem>
           <Link to="/map">Map</Link>{" "}

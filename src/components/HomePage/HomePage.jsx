@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import {
   Container,
   ErrorMsgBtnContainer,
@@ -12,7 +12,11 @@ import {
   SearchIco,
   Title,
 } from "./HomePage.styles";
-import { FaTimes, FaExclamation, FaSearchLocation } from "react-icons/fa";
+import {
+  FaTimes,
+  FaSearchLocation,
+  FaMapMarkedAlt,
+} from "react-icons/fa";
 import { Autocomplete } from "@react-google-maps/api";
 import place from "../../img/place.svg";
 import {
@@ -48,8 +52,6 @@ const HomePage = ({
     }, 3000);
   };
 
-        
-
   return (
     <Container>
       <Left>
@@ -60,17 +62,22 @@ const HomePage = ({
           borderRadius="lg"
           mt={4}
           bgColor="white"
+          padding="15px"
           shadow="base"
-          boxShadow="1px 2px 4px #00B0FF"
-          minW="auto"
-          maxW="90%"
+          boxShadow="2px 2px 3px #00B0FF"
+          width={{ base: "90%", md: "80%" }}
           zIndex="0"
         >
+          <Title>
+            <h1>Set The Route</h1>
+            <FaMapMarkedAlt />
+          </Title>
           <HStack spacing={4} marginBottom="15px">
             <Autocomplete>
               <Input
                 boxShadow="1px 1px 1px #00B0FF"
                 type="text"
+                size="md"
                 placeholder="Origin"
                 _placeholder={{ color: "inherit" }}
                 ref={originRef}
@@ -89,26 +96,17 @@ const HomePage = ({
           <ErrorMsgBtnContainer>
             {emptyInput && (
               <HStack>
-                <ErrorText>
-                  Direction Inputs Cannot Be Empty
-                  <FaExclamation />
-                </ErrorText>
+                <ErrorText>Direction Inputs Cannot Be Empty !!</ErrorText>
               </HStack>
             )}
             {incorrectInput && (
               <HStack>
-                <ErrorText>
-                  Incorrect Input Value
-                  <FaExclamation />
-                </ErrorText>
+                <ErrorText>Incorrect Input Value !!</ErrorText>
               </HStack>
             )}
             {notAvaliable && (
               <HStack>
-                <ErrorText>
-                  Your Car Can't Fly or Swim
-                  <FaExclamation />
-                </ErrorText>
+                <ErrorText>Your Car Can't Fly or Swim !!</ErrorText>
               </HStack>
             )}
             <div></div>
@@ -118,15 +116,12 @@ const HomePage = ({
                   colorScheme="pink"
                   type="submit"
                   onClick={calculateRoute}
+                  size="sm"
                 >
                   Calculate Route
                 </Button>
               </div>
-              <IconButton
-                aria-label="center back"
-                icon={<FaTimes />}
-                onClick={clearRoute}
-              />
+              <IconButton size="sm" icon={<FaTimes />} onClick={clearRoute} />
             </ButtonGroup>
           </ErrorMsgBtnContainer>
         </Box>
@@ -139,8 +134,7 @@ const HomePage = ({
             mt={4}
             bgColor="white"
             shadow="base"
-            minW="auto"
-            maxW="90%"
+            width={{ base: "90%", md: "80%" }}
             zIndex="0"
             boxShadow="2px 2px 3px #00B0FF"
           >

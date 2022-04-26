@@ -21,18 +21,24 @@ export const InfoContainer = styled.div`
   margin: 15px;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   position: absolute;
   left: 0;
   top: 0;
   max-width: 30%;
   font-weight: 300;
   border-radius: 15px;
+  @media screen and (max-width: 1024px) {
+    max-width: 45%;
+    font-size: 0.9rem;
+  }
   @media screen and (max-width: 768px) {
     max-width: 70%;
+    font-size: 0.9rem;
   }
   @media screen and (max-width: 480px) {
     max-width: 90%;
+    font-size: 0.8rem;
   }
 `;
 export const TitleWrapper = styled.div`

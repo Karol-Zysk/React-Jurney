@@ -10,7 +10,15 @@ import {
   TitleWrapper,
 } from "./MapPage.styles";
 import { center } from "../../App";
-import { Button, HStack, IconButton, Input } from "@chakra-ui/react";
+import {
+  Button,
+  FormLabel,
+  HStack,
+  IconButton,
+  NumberInput,
+  NumberInputField,
+  Stack,
+} from "@chakra-ui/react";
 import { FiMinimize2, FiMaximize2 } from "react-icons/fi";
 import { jsPDF } from "jspdf";
 import img from "../../img/map.png";
@@ -24,8 +32,12 @@ const MapPage = ({
   durationtxt,
 }) => {
   const [minimize, setMinimize] = useState(false);
-  const [consumption, setConsumption] = useState("");
-  const [fuelPrice, setFuelPrice] = useState("");
+  const [consumption, setConsumption] = useState(5);
+  const [fuelPrice, setFuelPrice] = useState(1.22);
+
+  const format = (val) => `$: ` + val;
+  const format2 = (val) => `l/km: ` + val;
+  const parse = (val) => val.replace(/^\$/, "");
 
   const cost = ((fuelPrice * consumption) / 100) * parseInt(distance / 1000);
 
@@ -88,28 +100,33 @@ const MapPage = ({
           </TitleWrapper>
           {minimize && (
             <HStack spacing={4} marginBottom="25px">
-              <Input
-                type="number"
-                size="sm"
-                borderColor="rgba(0,0,255,0.5)"
-                _placeholder={{ color: "inherit" }}
-                borderRadius="8px"
-                value={fuelPrice}
-                onChange={(e) => setFuelPrice(e.target.value)}
-                placeholder="Fuel Price"
-              />
-
-              <Input
-                type="number"
-                borderColor="rgba(0,0,255,0.5)"
-                borderRadius="8px"
-                _placeholder={{ color: "inherit" }}
-                size="sm"
-                value={consumption}
-                onChange={(e) => setConsumption(e.target.value)}
-                placeholder="Consumption / 100km"
-                marginInlineStart="0"
-              />
+              <Stack marginBottom="0px">
+                <FormLabel marginBottom="0px">Fuel Price</FormLabel>
+                <NumberInput
+                  onChange={(valueString) => setFuelPrice(parse(valueString))}
+                  value={format(fuelPrice)}
+                  max={50}
+                  size="sm"
+                  borderColor="rgba(0,0,255,0.5)"
+                  min={0}
+                >
+                  <NumberInputField />
+                </NumberInput>
+              </Stack>
+              )
+              <Stack marginBottom="0px">
+                <FormLabel marginBottom="0px">Consumption</FormLabel>
+                <NumberInput
+                  onChange={(valueString) => setConsumption(parse(valueString))}
+                  value={format2(consumption)}
+                  max={50}
+                  borderColor="rgba(0,0,255,0.5)"
+                  size="sm"
+                  min={0}
+                >
+                  <NumberInputField />
+                </NumberInput>
+              </Stack>
             </HStack>
           )}
           <TextWrapper minimize={minimize}>
