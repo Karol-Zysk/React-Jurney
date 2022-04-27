@@ -7,12 +7,12 @@ import HomePage from "./components/HomePage/HomePage";
 import { Container } from "./App.style";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import NotFound from "./components/NotFound/NotFound";
-import { storeRoutes } from "./utils/storage";
+import { getLocalStorage, storeRoutes } from "./utils/storage";
 import {
   emptyInputAlert,
   ErrorAlert,
   incorrectInputAlert,
-} from "./utils/ErrorsHandling";
+} from "./utils/errorsHandling";
 
 export const center = { lat: 48, lng: 3 };
 
@@ -42,11 +42,15 @@ function App() {
   //LOCALSTORAGE STATE
   const [routesStorage, setRoutesStorage] = useState([]);
 
+
+  //GET LOCAL STORAGE DATA
   useEffect(() => {
-    setRoutesStorage(JSON.parse(localStorage.getItem("route")) || []);
+    getLocalStorage(setRoutesStorage);
   }, [directionResponse, navigate]);
 
-  //using useRef instead of useState becouse of problems with <Autocomplete> Component
+  /*USING REFS INSTEAD OF USESTATE
+   BECOUSE OF PROBLEMS WITH  <AUTOCOMPLETE> COMPONENT*/
+  
   /**@type React.MutableRefObject<HTMLInputElement>*/
   const originRef = useRef();
   /**@type React.MutableRefObject<HTMLInputElement>*/
@@ -61,7 +65,6 @@ function App() {
       emptyInputAlert(setErrorMessage);
       return;
     }
-
     // eslint-disable-next-line no-undef
     const directionService = new google.maps.DirectionsService();
     // eslint-disable-next-line no-undef

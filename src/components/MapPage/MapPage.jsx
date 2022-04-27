@@ -90,6 +90,7 @@ const MapPage = ({
                 <FormLabel marginBottom="0px">Fuel Price</FormLabel>
 
                 <Input
+                  id="fuelPrice"
                   type="number"
                   size="sm"
                   borderColor="rgba(0,0,255,0.5)"
@@ -98,16 +99,21 @@ const MapPage = ({
                   value={fuelPrice}
                   onChange={(e) => setFuelPrice(e.target.value)}
                   placeholder="$"
+                  fontSize={{ base: "12px", md: "14px", lg: "16px" }}
+                  height={{ base: "32px", md: "28px", lg: "34px" }}
                 />
               </Stack>
               <Stack marginBottom="0px">
                 <FormLabel marginBottom="0px">Consumption</FormLabel>
                 <Input
+                  id="consumption"
                   type="number"
                   borderColor="rgba(0,0,255,0.5)"
                   borderRadius="8px"
                   _placeholder={{ color: "inherit" }}
-                  size="sm"
+                  size="md"
+                  fontSize={{ base: "12px", md: "14px", lg: "16px" }}
+                  height={{ base: "32px", md: "28px", lg: "34px" }}
                   value={consumption}
                   onChange={(e) => setConsumption(e.target.value)}
                   placeholder="Litre / 100km"

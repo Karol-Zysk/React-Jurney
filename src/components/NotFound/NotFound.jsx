@@ -1,11 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Container, HomeLink, Title } from "./NotFound.styles";
 
 const NotFound = () => (
-  <div>
-    <h1>404 - Not Found!</h1>
-    <Link to="/">Go Home</Link>
-  </div>
+  <Container>
+    <Title>
+      <h1>404 - Not Found!</h1>
+      <HomeLink to="/">Go Home</HomeLink>
+    </Title>
+  </Container>
 );
 
 export default NotFound;

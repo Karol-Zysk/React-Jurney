@@ -70,21 +70,27 @@ const HomePage = ({
           <HStack spacing={4} marginBottom="15px">
             <Autocomplete>
               <Input
+                id="origin"
                 boxShadow="1px 1px 1px #00B0FF"
                 type="text"
                 size="md"
                 placeholder="Origin"
                 _placeholder={{ color: "inherit" }}
                 ref={originRef}
-              />
+                fontSize={{ base: "12px", md: "14px", lg: "16px" }}
+                height={{ base: "32px", md: "28px", lg: "40px" }}
+              ></Input>
             </Autocomplete>
             <Autocomplete>
               <Input
+                id="destination"
                 type="text"
                 boxShadow="1px 1px 1px #00B0FF"
                 _placeholder={{ color: "inherit" }}
                 placeholder="Destination"
                 ref={destinationRef}
+                fontSize={{ base: "12px", md: "14px", lg: "16px" }}
+                height={{ base: "32px", md: "28px", lg: "40px" }}
               />
             </Autocomplete>
           </HStack>
@@ -99,12 +105,19 @@ const HomePage = ({
                   colorScheme="pink"
                   type="submit"
                   onClick={calculateRoute}
-                  size="sm"
+                  fontSize={{ base: "12px", md: "14px", lg: "16px" }}
+                  height={{ base: "32px", md: "28px", lg: "40px" }}
                 >
                   Calculate Route
                 </Button>
               </div>
-              <IconButton size="sm" icon={<FaTimes />} onClick={clearRoute} />
+              <IconButton
+                size="sm"
+                fontSize={{ base: "12px", md: "14px", lg: "16px" }}
+                height={{ base: "32px", md: "28px", lg: "40px" }}
+                icon={<FaTimes />}
+                onClick={clearRoute}
+              />
             </ButtonGroup>
           </ErrorMsgBtnContainer>
         </Box>

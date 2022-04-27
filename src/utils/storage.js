@@ -9,3 +9,7 @@ export const storeRoutes = (originRef, destinationRef) => {
 
   window.localStorage.setItem("route", JSON.stringify(storageArr) || []);
 };
+
+export const getLocalStorage = (setRoutesStorage) => {
+  setRoutesStorage(JSON.parse(localStorage.getItem("route")) || []);
+};
