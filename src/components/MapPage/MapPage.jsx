@@ -26,7 +26,7 @@ import img from "../../img/map.png";
 import { cost, howLong } from "../../utils/utils";
 import { createPdf } from "../../utils/createPdf";
 
-const MapPage = () => {
+const MapPage = ({ map, setMap }) => {
   let {
     origin,
     destination,
@@ -38,12 +38,9 @@ const MapPage = () => {
   const [minimize, setMinimize] = useState(false);
   const [consumption, setConsumption] = useState("");
   const [fuelPrice, setFuelPrice] = useState("");
-  const [map, setMap] = useState(/** @type google.maps.GoogleMap*/ (null));
 
-  
-
+  //CALCULATING JURNEY VALUES
   const distanceKM = distance / 1000;
-
   let howManyDays = howLong(distance);
   let jurneyPrice = cost(fuelPrice, consumption, distance);
   let createPdfHandler = () => {

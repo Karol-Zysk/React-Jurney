@@ -1,6 +1,4 @@
 import { useState, useEffect, useContext, useRef } from "react";
-import { Spinner } from "@chakra-ui/react";
-import { useJsApiLoader } from "@react-google-maps/api";
 import { useNavigate } from "react-router-dom";
 import { MapRouteContext } from "../../context/context";
 import {
@@ -41,36 +39,27 @@ const HomePage = () => {
     setDirectionResponse,
   } = useContext(MapRouteContext);
 
-  //PERFORMANCE ERROR PREVENTION
-  const [libraries] = useState(["places"]);
-  //CONNECTION WITH GOOGLE MAPS API
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-    libraries,
-  });
+  
 
   let navigate = useNavigate();
-  
+
   //ERROR HANDLING STATE
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [routesStorage, setRoutesStorage] = useState([]);
-
+  
   //ANIMATION PROP
   const [animation, setAnimation] = useState(false);
-
+  
   //GET LOCAL STORAGE DATA
+  const [routesStorage, setRoutesStorage] = useState([]);
   useEffect(() => {
     getLocalStorage(setRoutesStorage);
   }, [directionResponse, navigate]);
 
-
   //SETTING MAP FOR GOOGLEMAP COMPONENT
+
   
 
-  //SETTING GOOGLEMAP DIRECTION RESULTS
-
-  //LOCALSTORAGE STATE
 
   /*USING REFS INSTEAD OF USESTATE
     BECOUSE OF PROBLEMS WITH  <AUTOCOMPLETE> COMPONENT*/
@@ -80,10 +69,7 @@ const HomePage = () => {
   /**@type React.MutableRefObject<HTMLInputElement>*/
   const destinationRef = useRef();
 
-  if (!isLoaded) {
-    return <Spinner>Loading...</Spinner>;
-  }
-
+  
 
   const incorrectInputAlert = () => {
     if (originRef.current.value === "" || destinationRef.current.value === "") {
@@ -120,6 +106,7 @@ const HomePage = () => {
         travelMode: google.maps.TravelMode.DRIVING,
       });
       incorrectInputAlert();
+      //SETTING GOOGLEMAP DIRECTION RESULTS
       setOrigin(originRef.current.value);
       setDestination(destinationRef.current.value);
       setDirectionResponse(results);
@@ -128,10 +115,8 @@ const HomePage = () => {
 
       if (results) {
         storeRoutes(originRef, destinationRef);
-        setTimeout(() => {
-          navigate("/map");
-        }, 2000);
-        clearTimeout();
+
+        navigate("/map");
       }
     } catch (error) {
       ErrorAlert(error.code, setErrorMessage);
@@ -155,10 +140,6 @@ const HomePage = () => {
   };
   const animationHandler = () => {
     setAnimation(true);
-    setTimeout(() => {
-      setAnimation(false);
-    }, 3000);
-    clearTimeout();
   };
 
   return (
