@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
+import { Spinner } from "@chakra-ui/react";
+import { useJsApiLoader } from "@react-google-maps/api";
+import { useNavigate } from "react-router-dom";
+import { MapRouteContext } from "../../context/context";
 import {
   Container,
   ErrorMsgBtnContainer,
@@ -15,6 +19,8 @@ import {
 import { FaTimes, FaSearchLocation, FaMapMarkedAlt } from "react-icons/fa";
 import { Autocomplete } from "@react-google-maps/api";
 import place from "../../img/place.svg";
+import { getLocalStorage } from "../../utils/storage";
+
 import {
   Box,
   Button,
@@ -25,17 +31,59 @@ import {
 } from "@chakra-ui/react";
 import { storeRoutes } from "../../utils/storage";
 
-const HomePage = ({
-  originRef,
-  destinationRef,
-  routesStorage,
-}) => {
+const HomePage = () => {
+  let {
+    setOrigin,
+    setDestination,
+    setDistance,
+    setDurationTxt,
+    directionResponse,
+    setDirectionResponse,
+  } = useContext(MapRouteContext);
+
+  //PERFORMANCE ERROR PREVENTION
+  const [libraries] = useState(["places"]);
+  //CONNECTION WITH GOOGLE MAPS API
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+    libraries,
+  });
+
+  let navigate = useNavigate();
+  
   //ERROR HANDLING STATE
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [durationtxt, setDurationTxt] = useState("");
+  const [routesStorage, setRoutesStorage] = useState([]);
+
   //ANIMATION PROP
   const [animation, setAnimation] = useState(false);
+
+  //GET LOCAL STORAGE DATA
+  useEffect(() => {
+    getLocalStorage(setRoutesStorage);
+  }, [directionResponse, navigate]);
+
+
+  //SETTING MAP FOR GOOGLEMAP COMPONENT
+  
+
+  //SETTING GOOGLEMAP DIRECTION RESULTS
+
+  //LOCALSTORAGE STATE
+
+  /*USING REFS INSTEAD OF USESTATE
+    BECOUSE OF PROBLEMS WITH  <AUTOCOMPLETE> COMPONENT*/
+
+  /**@type React.MutableRefObject<HTMLInputElement>*/
+  const originRef = useRef();
+  /**@type React.MutableRefObject<HTMLInputElement>*/
+  const destinationRef = useRef();
+
+  if (!isLoaded) {
+    return <Spinner>Loading...</Spinner>;
+  }
+
 
   const incorrectInputAlert = () => {
     if (originRef.current.value === "" || destinationRef.current.value === "") {
@@ -76,7 +124,6 @@ const HomePage = ({
       setDestination(destinationRef.current.value);
       setDirectionResponse(results);
       setDistance(results.routes[0].legs[0].distance.value);
-      setDuration(results.routes[0].legs[0].duration.value);
       setDurationTxt(results.routes[0].legs[0].duration.text);
 
       if (results) {
@@ -94,7 +141,7 @@ const HomePage = ({
   const clearRoute = () => {
     setDirectionResponse(null);
     setDistance("");
-    setDuration("");
+    setDurationTxt("");
     setDestination("");
     setOrigin("");
     originRef.current.value = "";
