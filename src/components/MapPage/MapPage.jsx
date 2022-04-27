@@ -22,7 +22,7 @@ import {
 import { FiMinimize2, FiMaximize2 } from "react-icons/fi";
 import { jsPDF } from "jspdf";
 import img from "../../img/map.png";
-import { cost, howLong } from "../../utils/utils";
+import { cost, howLong } from "../../utils/mapPageCalculations";
 import { createPdf } from "../../utils/createPdf";
 
 const MapPage = () => {

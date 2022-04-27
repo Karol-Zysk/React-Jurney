@@ -70,15 +70,23 @@ const HomePage = () => {
     }
   };
 
-  //
+  const animationHandler = () => {
+    setIsAnimating(true);
+    const Animation = setTimeout(() => {
+      setIsAnimating(false);
+    }, 1000);
+    clearTimeout(Animation);
+  };
+
+  //MAIN FUNCTION CALCULATING ROUTE
   const calculateRoute = async () => {
     //SETTING ANIMATION
-
+    animationHandler();
     //CHEKING IF INPUTS NOT EMPTY
     if (originRef.current.value === "" && destinationRef.current.value === "") {
       setErrorMessage("No Empty Inputs !");
 
-      return "";
+      return;
     }
     // eslint-disable-next-line no-undef
     const directionService = new google.maps.DirectionsService();
@@ -93,8 +101,8 @@ const HomePage = () => {
 
       //SETTING GOOGLEMAP DIRECTION RESULTS
       setDirectionResponse(results);
+
       if (results) {
-        setIsAnimating(true);
         //THE SAME INPUT VALUES
         if (originRef.current.value === destinationRef.current.value) {
           setErrorMessage("Try diffrent directions");
@@ -102,7 +110,6 @@ const HomePage = () => {
         }
         storeRoutes(originRef, destinationRef);
         navigate("/map");
-        setIsAnimating(false);
       }
     } catch (error) {
       ErrorAlert(error.code, setErrorMessage);
