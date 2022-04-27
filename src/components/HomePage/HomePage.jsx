@@ -70,7 +70,7 @@ const HomePage = () => {
   const destinationRef = useRef();
 
   
-
+  //ERROR HANDLING
   const incorrectInputAlert = () => {
     if (originRef.current.value === "" || destinationRef.current.value === "") {
       setErrorMessage("No Empty Inputs !");
@@ -94,6 +94,7 @@ const HomePage = () => {
     }
   };
 
+  //
   const calculateRoute = async () => {
     // eslint-disable-next-line no-undef
     const directionService = new google.maps.DirectionsService();
@@ -115,7 +116,6 @@ const HomePage = () => {
 
       if (results) {
         storeRoutes(originRef, destinationRef);
-
         navigate("/map");
       }
     } catch (error) {
