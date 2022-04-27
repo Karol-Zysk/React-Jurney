@@ -11,23 +11,18 @@ import { Spinner } from "@chakra-ui/react";
 
 export const center = { lat: 53.38, lng: 21.34 };
 
-
 function App() {
+  //PERFORMANCE ERROR PREVENTION
+  const [libraries] = useState(["places"]);
+  //CONNECTION WITH GOOGLE MAPS API
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+    libraries,
+  });
 
-//PERFORMANCE ERROR PREVENTION
-const [libraries] = useState(["places"]);
-//CONNECTION WITH GOOGLE MAPS API
-const { isLoaded } = useJsApiLoader({
-  googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-  libraries,
-});
-
-const [map, setMap] = useState(/** @type google.maps.Map*/ (null));
-
-if (!isLoaded) {
-  return <Spinner>Loading...</Spinner>;
-}
-
+  if (!isLoaded) {
+    return <Spinner>Loading...</Spinner>;
+  }
 
   return (
     <MapRouteProvider>
@@ -35,7 +30,7 @@ if (!isLoaded) {
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/map" element={<MapPage map={map} setMap={setMap} />} />
+          <Route path="/map" element={<MapPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>

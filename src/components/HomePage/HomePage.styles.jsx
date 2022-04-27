@@ -79,9 +79,8 @@ export const ImgWrapperTitle = styled.div`
 export const SearchIco = styled(FaSearchLocation)`
   position: absolute;
   animation: orbit 2s linear 0s forwards infinite;
-  animation-play-state: ${({ animation }) =>
-    animation ? "running" : "paused"};
-  display: ${({ animation }) => (animation ? "block" : "none")};
+  animation-play-state: running;
+  display: block;
   font-size: 7rem;
   font-weight: bold;
   color: rgba(0, 176, 255, 0.7);

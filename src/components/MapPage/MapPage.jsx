@@ -26,24 +26,29 @@ import img from "../../img/map.png";
 import { cost, howLong } from "../../utils/utils";
 import { createPdf } from "../../utils/createPdf";
 
-const MapPage = ({ map, setMap }) => {
-  let {
-    origin,
-    destination,
-    distance,
-    durationtxt,
-    directionResponse,
-  } = useContext(MapRouteContext);
+const MapPage = () => {
+  let { directionResponse } = useContext(MapRouteContext);
 
+  //SETTING MAP FOR GOOGLEMAP COMPONENT
+  // eslint-disable-next-line no-unused-vars
+  const [map, setMap] = useState(/** @type google.maps.Map*/ (null));
   const [minimize, setMinimize] = useState(false);
+
+  //INPUT STATE
   const [consumption, setConsumption] = useState("");
   const [fuelPrice, setFuelPrice] = useState("");
 
+  const distance = directionResponse?.routes[0].legs[0].distance.value || "";
+  const durationtxt = directionResponse?.routes[0].legs[0].duration.text || "";
+  const origin = directionResponse?.request.origin.query || "";
+  const destination = directionResponse?.request.destination.query || "";
+
   //CALCULATING JURNEY VALUES
   const distanceKM = distance / 1000;
-  let howManyDays = howLong(distance);
-  let jurneyPrice = cost(fuelPrice, consumption, distance);
-  let createPdfHandler = () => {
+  const howManyDays = howLong(distance);
+  const jurneyPrice = cost(fuelPrice, consumption, distance);
+
+  const createPdfHandler = () => {
     createPdf(
       jsPDF,
       img,

@@ -5,26 +5,11 @@ export const MapRouteContext = createContext();
 
 //CALCULATE ROUTE STATE
 export const MapRouteProvider = ({ children }) => {
-  const [duration, setDuration] = useState("");
-  const [durationtxt, setDurationTxt] = useState("");
-  const [distance, setDistance] = useState("");
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
-  const [directionResponse, setDirectionResponse] = useState(null);
+  const [directionResponse, setDirectionResponse] = useState();
 
   return (
     <MapRouteContext.Provider
       value={{
-        duration,
-        setDuration,
-        durationtxt,
-        setDurationTxt,
-        distance,
-        setDistance,
-        destination,
-        setDestination,
-        origin,
-        setOrigin,
         directionResponse,
         setDirectionResponse,
       }}

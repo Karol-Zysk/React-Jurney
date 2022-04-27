@@ -30,57 +30,30 @@ import {
 import { storeRoutes } from "../../utils/storage";
 
 const HomePage = () => {
-  let {
-    setOrigin,
-    setDestination,
-    setDistance,
-    setDurationTxt,
-    directionResponse,
-    setDirectionResponse,
-  } = useContext(MapRouteContext);
-
-  
+  let { directionResponse, setDirectionResponse } = useContext(MapRouteContext);
 
   let navigate = useNavigate();
 
   //ERROR HANDLING STATE
   const [errorMessage, setErrorMessage] = useState("");
 
-  
   //ANIMATION PROP
-  const [animation, setAnimation] = useState(false);
-  
+  const [isAnimating, setIsAnimating] = useState(false);
+
   //GET LOCAL STORAGE DATA
   const [routesStorage, setRoutesStorage] = useState([]);
   useEffect(() => {
     getLocalStorage(setRoutesStorage);
   }, [directionResponse, navigate]);
 
-  //SETTING MAP FOR GOOGLEMAP COMPONENT
-
   
-
 
   /*USING REFS INSTEAD OF USESTATE
     BECOUSE OF PROBLEMS WITH  <AUTOCOMPLETE> COMPONENT*/
-
   /**@type React.MutableRefObject<HTMLInputElement>*/
   const originRef = useRef();
   /**@type React.MutableRefObject<HTMLInputElement>*/
   const destinationRef = useRef();
-
-  
-  //ERROR HANDLING
-  const incorrectInputAlert = () => {
-    if (originRef.current.value === "" || destinationRef.current.value === "") {
-      setErrorMessage("No Empty Inputs !");
-      return;
-    } else if (originRef.current.value === destinationRef.current.value) {
-      setErrorMessage("Try diffrent directions");
-      return;
-    }
-    return;
-  };
 
   const ErrorAlert = (error) => {
     if (error === "NOT_FOUND") {
@@ -96,6 +69,11 @@ const HomePage = () => {
 
   //
   const calculateRoute = async () => {
+    //CHEKING IF INPUTS NOT EMPTY
+    if (originRef.current.value === "" && destinationRef.current.value === "") {
+      setErrorMessage("No Empty Inputs !");
+      return "";
+    }
     // eslint-disable-next-line no-undef
     const directionService = new google.maps.DirectionsService();
     // eslint-disable-next-line no-undef
@@ -106,29 +84,25 @@ const HomePage = () => {
         // eslint-disable-next-line no-undef
         travelMode: google.maps.TravelMode.DRIVING,
       });
-      incorrectInputAlert();
       //SETTING GOOGLEMAP DIRECTION RESULTS
-      setOrigin(originRef.current.value);
-      setDestination(destinationRef.current.value);
       setDirectionResponse(results);
-      setDistance(results.routes[0].legs[0].distance.value);
-      setDurationTxt(results.routes[0].legs[0].duration.text);
-
       if (results) {
+        //THE SAME INPUT VALUES
+        if (originRef.current.value === destinationRef.current.value) {
+          setErrorMessage("Try diffrent directions");
+          return;
+        }
         storeRoutes(originRef, destinationRef);
         navigate("/map");
       }
     } catch (error) {
       ErrorAlert(error.code, setErrorMessage);
+      return;
     }
   };
 
   const clearRoute = () => {
     setDirectionResponse(null);
-    setDistance("");
-    setDurationTxt("");
-    setDestination("");
-    setOrigin("");
     originRef.current.value = "";
     destinationRef.current.value = "";
   };
@@ -139,7 +113,7 @@ const HomePage = () => {
     destinationRef.current.value = route.destination;
   };
   const animationHandler = () => {
-    setAnimation(true);
+    setIsAnimating(true);
   };
 
   return (
@@ -193,7 +167,6 @@ const HomePage = () => {
             <HStack>
               {errorMessage !== "" && <ErrorText>{errorMessage}</ErrorText>}
             </HStack>
-
             <ButtonGroup alignSelf="flex-end" justifySelf="flex-end">
               <div onClick={animationHandler}>
                 <Button
@@ -254,7 +227,7 @@ const HomePage = () => {
         )}
       </ContentWrapper>
       <ImgWrapper>
-        <SearchIco animation={animation ? 1 : 0} />
+        {isAnimating && <SearchIco />}
         <ImgWrapperTitle>
           <p>Find Your Path</p>
           <FaSearchLocation />
