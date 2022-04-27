@@ -7,6 +7,12 @@ import HomePage from "./components/HomePage/HomePage";
 import { Container } from "./App.style";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import NotFound from "./components/NotFound/NotFound";
+import { storeRoutes } from "./utils/storage";
+import {
+  emptyInputAlert,
+  ErrorAlert,
+  incorrectInputAlert,
+} from "./utils/ErrorsHandling";
 
 export const center = { lat: 48, lng: 3 };
 
@@ -18,7 +24,6 @@ function App() {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries,
   });
-
   let navigate = useNavigate();
   //SETTING MAP FOR GOOGLEMAP COMPONENT
   const [map, setMap] = useState(/** @type google.maps.GoogleMap*/ (null));
@@ -32,66 +37,28 @@ function App() {
   const [destination, setDestination] = useState("");
 
   //ERROR HANDLING STATE
-  const [emptyInput, setEmptyInput] = useState(false);
-  const [incorrectInput, setIncorrectInput] = useState(false);
-  const [notAvaliable, setNotAvaliable] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  //LOCALSTORAGE STATE
   const [routesStorage, setRoutesStorage] = useState([]);
 
   useEffect(() => {
     setRoutesStorage(JSON.parse(localStorage.getItem("route")) || []);
   }, [directionResponse, navigate]);
 
+  //using useRef instead of useState becouse of problems with <Autocomplete> Component
   /**@type React.MutableRefObject<HTMLInputElement>*/
   const originRef = useRef();
   /**@type React.MutableRefObject<HTMLInputElement>*/
   const destinationRef = useRef();
-  /**@type React.MutableRefObject<HTMLInputElement>*/
 
   if (!isLoaded) {
     return <Spinner>Loading...</Spinner>;
   }
 
-  const emptyInputAlert = () => {
-    setEmptyInput(true);
-    setTimeout(() => {
-      setEmptyInput(false);
-    }, 3500);
-  };
-  const incorrectInputAlert = () => {
-    setIncorrectInput(true);
-    setTimeout(() => {
-      setIncorrectInput(false);
-    }, 3500);
-  };
-  const notAvaliableAlert = () => {
-    setNotAvaliable(true);
-    setTimeout(() => {
-      setNotAvaliable(false);
-    }, 3500);
-  };
-
-  let storageArr = [];
-
-  const storeRoutes = () => {
-    const object = {
-      origin: `${originRef.current.value}`,
-      destination: `${destinationRef.current.value}`,
-    };
-
-    storageArr.push(
-      ...(JSON.parse(localStorage.getItem("route")) || []),
-      object
-    );
-
-    window.localStorage.setItem(
-      "route",
-      JSON.stringify(storageArr.reverse()) || []
-    );
-  };
-
   const calculateRoute = async () => {
     if (originRef.current.value === "" || destinationRef.current.value === "") {
-      emptyInputAlert();
+      emptyInputAlert(setErrorMessage);
       return;
     }
 
@@ -106,7 +73,7 @@ function App() {
         travelMode: google.maps.TravelMode.DRIVING,
       });
       if (originRef.current.value === destinationRef.current.value) {
-        incorrectInputAlert();
+        incorrectInputAlert(setErrorMessage);
         return;
       } else {
         setOrigin(originRef.current.value);
@@ -117,21 +84,14 @@ function App() {
         setDurationTxt(results.routes[0].legs[0].duration.text);
       }
       if (results) {
-        storeRoutes();
-        
+        storeRoutes(originRef, destinationRef);
         setTimeout(() => {
-          
           navigate("/map");
         }, 2000);
+        clearTimeout();
       }
     } catch (error) {
-      if (error.code === "NOT_FOUND") {
-        incorrectInputAlert();
-      } else if (error.code === "ZERO_RESULTS") {
-        notAvaliableAlert();
-      } else {
-        alert(error);
-      }
+      ErrorAlert(error.code, setErrorMessage);
     }
   };
 
@@ -155,15 +115,11 @@ function App() {
             element={
               <HomePage
                 routesStorage={routesStorage}
-                notAvaliable={notAvaliable}
-                incorrectInput={incorrectInput}
-                emptyInput={emptyInput}
+                errorMessage={errorMessage}
                 originRef={originRef}
                 destinationRef={destinationRef}
                 calculateRoute={calculateRoute}
                 clearRoute={clearRoute}
-                map={map}
-                
               />
             }
           />

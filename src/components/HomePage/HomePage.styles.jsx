@@ -12,7 +12,7 @@ export const Container = styled.div`
   }
 `;
 
-export const Left = styled.div`
+export const ContentWrapper = styled.div`
   width: 55%;
   display: flex;
   flex-direction: column;
@@ -42,7 +42,7 @@ export const ErrorText = styled.div`
   }
 `;
 
-export const Right = styled.div`
+export const ImgWrapper = styled.div`
   width: 45%;
   display: flex;
   flex-direction: column;
@@ -56,7 +56,7 @@ export const Right = styled.div`
   }
 `;
 
-export const RightTitle = styled.div`
+export const ImgWrapperTitle = styled.div`
   font-size: 40px;
   width: 100%;
   font-weight: bold;

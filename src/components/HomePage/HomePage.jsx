@@ -4,10 +4,10 @@ import {
   ErrorMsgBtnContainer,
   ErrorText,
   Image,
-  Left,
+  ContentWrapper,
   Place,
-  Right,
-  RightTitle,
+  ImgWrapper,
+  ImgWrapperTitle,
   Route,
   SearchIco,
   Title,
@@ -25,13 +25,11 @@ import {
 } from "@chakra-ui/react";
 
 const HomePage = ({
-  incorrectInput,
   originRef,
   destinationRef,
   calculateRoute,
   clearRoute,
-  emptyInput,
-  notAvaliable,
+  errorMessage,
   routesStorage,
 }) => {
   const [animation, setAnimation] = useState(false);
@@ -46,11 +44,12 @@ const HomePage = ({
     setTimeout(() => {
       setAnimation(false);
     }, 3000);
+    clearTimeout();
   };
 
   return (
     <Container>
-      <Left>
+      <ContentWrapper>
         <Box
           display="flex"
           flexDirection="column"
@@ -90,22 +89,10 @@ const HomePage = ({
             </Autocomplete>
           </HStack>
           <ErrorMsgBtnContainer>
-            {emptyInput && (
-              <HStack>
-                <ErrorText>Direction Inputs Cannot Be Empty !!</ErrorText>
-              </HStack>
-            )}
-            {incorrectInput && (
-              <HStack>
-                <ErrorText>Incorrect Input Value !!</ErrorText>
-              </HStack>
-            )}
-            {notAvaliable && (
-              <HStack>
-                <ErrorText>Your Car Can't Fly or Swim !!</ErrorText>
-              </HStack>
-            )}
-            <div></div>
+            <HStack>
+              {errorMessage !== "" && <ErrorText>{errorMessage}</ErrorText>}
+            </HStack>
+
             <ButtonGroup alignSelf="flex-end" justifySelf="flex-end">
               <div onClick={animationHandler}>
                 <Button
@@ -157,15 +144,15 @@ const HomePage = ({
             })}
           </Box>
         )}
-      </Left>
-      <Right>
+      </ContentWrapper>
+      <ImgWrapper>
         <SearchIco animation={animation ? 1 : 0} />
-        <RightTitle>
+        <ImgWrapperTitle>
           <p>Find Your Path</p>
           <FaSearchLocation />
-        </RightTitle>
+        </ImgWrapperTitle>
         <Image src={place} />
-      </Right>
+      </ImgWrapper>
     </Container>
   );
 };
