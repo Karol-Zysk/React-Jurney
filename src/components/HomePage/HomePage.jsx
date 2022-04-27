@@ -23,16 +23,83 @@ import {
   IconButton,
   Input,
 } from "@chakra-ui/react";
+import { storeRoutes } from "../../utils/storage";
 
 const HomePage = ({
   originRef,
   destinationRef,
-  calculateRoute,
-  clearRoute,
-  errorMessage,
   routesStorage,
 }) => {
+  //ERROR HANDLING STATE
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [durationtxt, setDurationTxt] = useState("");
+  //ANIMATION PROP
   const [animation, setAnimation] = useState(false);
+
+  const incorrectInputAlert = () => {
+    if (originRef.current.value === "" || destinationRef.current.value === "") {
+      setErrorMessage("No Empty Inputs !");
+      return;
+    } else if (originRef.current.value === destinationRef.current.value) {
+      setErrorMessage("Try diffrent directions");
+      return;
+    }
+    return;
+  };
+
+  const ErrorAlert = (error) => {
+    if (error === "NOT_FOUND") {
+      setErrorMessage("Incorrect Value !");
+    } else if (error === "ZERO_RESULTS") {
+      setErrorMessage("Your Car can't fly!");
+    } else if (error === "MAX_ROUTE_LENGTH_EXCEEDED") {
+      setErrorMessage("Too Long Jurney !");
+    } else {
+      setErrorMessage("Something Went wrong !");
+    }
+  };
+
+  const calculateRoute = async () => {
+    // eslint-disable-next-line no-undef
+    const directionService = new google.maps.DirectionsService();
+    // eslint-disable-next-line no-undef
+    try {
+      const results = await directionService.route({
+        origin: originRef.current.value,
+        destination: destinationRef.current.value,
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode.DRIVING,
+      });
+      incorrectInputAlert();
+      setOrigin(originRef.current.value);
+      setDestination(destinationRef.current.value);
+      setDirectionResponse(results);
+      setDistance(results.routes[0].legs[0].distance.value);
+      setDuration(results.routes[0].legs[0].duration.value);
+      setDurationTxt(results.routes[0].legs[0].duration.text);
+
+      if (results) {
+        storeRoutes(originRef, destinationRef);
+        setTimeout(() => {
+          navigate("/map");
+        }, 2000);
+        clearTimeout();
+      }
+    } catch (error) {
+      ErrorAlert(error.code, setErrorMessage);
+    }
+  };
+
+  const clearRoute = () => {
+    setDirectionResponse(null);
+    setDistance("");
+    setDuration("");
+    setDestination("");
+    setOrigin("");
+    originRef.current.value = "";
+    destinationRef.current.value = "";
+  };
 
   // Filling inputs when History tab clicked
   const setHistoryHandler = (route) => {

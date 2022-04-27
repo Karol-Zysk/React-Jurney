@@ -7,8 +7,8 @@ import HomePage from "./components/HomePage/HomePage";
 import { Container } from "./App.style";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import NotFound from "./components/NotFound/NotFound";
-import { getLocalStorage, storeRoutes } from "./utils/storage";
-// import {MapRouteContext} from './context/context'
+import { getLocalStorage} from "./utils/storage";
+import {MapRouteContext} from './context/context'
 
 export const center = { lat: 48, lng: 3 };
 
@@ -32,12 +32,11 @@ function App() {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
 
-  //ERROR HANDLING STATE
-  const [errorMessage, setErrorMessage] = useState("");
+  
 
   //LOCALSTORAGE STATE
   const [routesStorage, setRoutesStorage] = useState([]);
-
+  
   //GET LOCAL STORAGE DATA
   useEffect(() => {
     getLocalStorage(setRoutesStorage);
@@ -55,72 +54,13 @@ function App() {
     return <Spinner>Loading...</Spinner>;
   }
 
-  const incorrectInputAlert = () => {
-    if (originRef.current.value === "" || destinationRef.current.value === "") {
-      setErrorMessage("No Empty Inputs !");
-      return;
-    } else if (originRef.current.value === destinationRef.current.value) {
-      setErrorMessage("Try diffrent directions");
-      return;
-    }
-    return;
-  };
+  
 
-  const ErrorAlert = (error) => {
-    if (error === "NOT_FOUND") {
-      setErrorMessage("Incorrect Value !");
-    } else if (error === "ZERO_RESULTS") {
-      setErrorMessage("Your Car can't fly!");
-    } else if (error === "MAX_ROUTE_LENGTH_EXCEEDED") {
-      setErrorMessage("Too Long Jurney !");
-    } else {
-      setErrorMessage("Something Went wrong !");
-    }
-  };
 
-  const calculateRoute = async () => {
-    // eslint-disable-next-line no-undef
-    const directionService = new google.maps.DirectionsService();
-    // eslint-disable-next-line no-undef
-    try {
-      const results = await directionService.route({
-        origin: originRef.current.value,
-        destination: destinationRef.current.value,
-        // eslint-disable-next-line no-undef
-        travelMode: google.maps.TravelMode.DRIVING,
-      });
-      incorrectInputAlert();
-      setOrigin(originRef.current.value);
-      setDestination(destinationRef.current.value);
-      setDirectionResponse(results);
-      setDistance(results.routes[0].legs[0].distance.value);
-      setDuration(results.routes[0].legs[0].duration.value);
-      setDurationTxt(results.routes[0].legs[0].duration.text);
-
-      if (results) {
-        storeRoutes(originRef, destinationRef);
-        setTimeout(() => {
-          navigate("/map");
-        }, 2000);
-        clearTimeout();
-      }
-    } catch (error) {
-      ErrorAlert(error.code, setErrorMessage);
-    }
-  };
-
-  const clearRoute = () => {
-    setDirectionResponse(null);
-    setDistance("");
-    setDuration("");
-    setDestination("");
-    setOrigin("");
-    originRef.current.value = "";
-    destinationRef.current.value = "";
-  };
+  
 
   return (
-    <>
+    <MapRouteContext.Provider value={'name'}>
       <Container>
         <Navbar />
         <Routes>
@@ -129,10 +69,8 @@ function App() {
             element={
               <HomePage
                 routesStorage={routesStorage}
-                errorMessage={errorMessage}
                 originRef={originRef}
                 destinationRef={destinationRef}
-                calculateRoute={calculateRoute}
                 clearRoute={clearRoute}
               />
             }
@@ -155,7 +93,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
-    </>
+    </MapRouteContext.Provider>
   );
 }
 
