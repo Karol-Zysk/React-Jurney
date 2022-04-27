@@ -19,7 +19,6 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
-
 import { FiMinimize2, FiMaximize2 } from "react-icons/fi";
 import { jsPDF } from "jspdf";
 import img from "../../img/map.png";

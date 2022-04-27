@@ -6,6 +6,7 @@ export const Container = styled.div`
   width: 100%;
   display: flex;
   padding: 2rem 0;
+  background: rgba(0, 176, 255, 0.04);
   @media screen and (max-width: 768px) {
     flex-direction: column;
     height: auto;
@@ -52,7 +53,6 @@ export const ImgWrapper = styled.div`
   order: 1;
   @media screen and (max-width: 768px) {
     width: 100%;
-    margin: 2rem 0;
   }
 `;
 
@@ -78,7 +78,7 @@ export const ImgWrapperTitle = styled.div`
 
 export const SearchIco = styled(FaSearchLocation)`
   position: absolute;
-  animation: orbit 2s linear 0s forwards infinite;
+  animation: orbit 3s linear 0s forwards infinite;
   animation-play-state: running;
   display: block;
   font-size: 7rem;
@@ -97,10 +97,10 @@ export const SearchIco = styled(FaSearchLocation)`
 
   @keyframes orbit {
     from {
-      transform: rotate(0deg) translateX(70px) rotate(0deg);
+      transform: rotate(0deg) translateX(40px) rotate(0deg);
     }
     to {
-      transform: rotate(360deg) translateX(70px) rotate(-360deg);
+      transform: rotate(360deg) translateX(40px) rotate(-360deg);
     }
   }
 `;
@@ -127,13 +127,13 @@ export const Title = styled.div`
   border-bottom: rgba(0, 176, 255, 0.5);
   color: rgba(0, 0, 0, 0.7);
   h1 {
-    margin-right: 1.4rem;
+    margin-right: 1.2rem;
     @media screen and (max-width: 768px) {
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
     margin-right: 20px;
     @media screen and (max-width: 468px) {
-      font-size: 16px;
+      font-size: 1rem;
     }
   }
 `;
@@ -142,6 +142,7 @@ export const Route = styled.div`
   display: flex;
   justify-content: center;
   padding-bottom: 0.3rem;
+  padding-top: 0.3rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
   color: rgba(0, 0, 0, 0.8);
@@ -161,9 +162,9 @@ export const Place = styled.div`
   justify-self: center;
   width: 100%;
   align-items: stretch;
-  padding-left: 0.5rem;
+  padding-left: 1rem;
   &:last-child {
-    border-left: 1px solid #00b0ff;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
   }
 
   p {

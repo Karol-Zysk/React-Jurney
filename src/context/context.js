@@ -3,8 +3,8 @@ import { createContext } from "react";
 
 export const MapRouteContext = createContext();
 
-//CALCULATE ROUTE STATE
 export const MapRouteProvider = ({ children }) => {
+  //CALCULATE ROUTE STATE
   const [directionResponse, setDirectionResponse] = useState();
 
   return (

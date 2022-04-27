@@ -14,7 +14,12 @@ import {
   SearchIco,
   Title,
 } from "./HomePage.styles";
-import { FaTimes, FaSearchLocation, FaMapMarkedAlt } from "react-icons/fa";
+import {
+  FaTimes,
+  FaSearchLocation,
+  FaMapMarkedAlt,
+  FaHistory,
+} from "react-icons/fa";
 import { Autocomplete } from "@react-google-maps/api";
 import place from "../../img/place.svg";
 import { getLocalStorage } from "../../utils/storage";
@@ -46,8 +51,6 @@ const HomePage = () => {
     getLocalStorage(setRoutesStorage);
   }, [directionResponse, navigate]);
 
-  
-
   /*USING REFS INSTEAD OF USESTATE
     BECOUSE OF PROBLEMS WITH  <AUTOCOMPLETE> COMPONENT*/
   /**@type React.MutableRefObject<HTMLInputElement>*/
@@ -69,9 +72,12 @@ const HomePage = () => {
 
   //
   const calculateRoute = async () => {
+    //SETTING ANIMATION
+
     //CHEKING IF INPUTS NOT EMPTY
     if (originRef.current.value === "" && destinationRef.current.value === "") {
       setErrorMessage("No Empty Inputs !");
+
       return "";
     }
     // eslint-disable-next-line no-undef
@@ -84,9 +90,11 @@ const HomePage = () => {
         // eslint-disable-next-line no-undef
         travelMode: google.maps.TravelMode.DRIVING,
       });
+
       //SETTING GOOGLEMAP DIRECTION RESULTS
       setDirectionResponse(results);
       if (results) {
+        setIsAnimating(true);
         //THE SAME INPUT VALUES
         if (originRef.current.value === destinationRef.current.value) {
           setErrorMessage("Try diffrent directions");
@@ -94,9 +102,11 @@ const HomePage = () => {
         }
         storeRoutes(originRef, destinationRef);
         navigate("/map");
+        setIsAnimating(false);
       }
     } catch (error) {
       ErrorAlert(error.code, setErrorMessage);
+
       return;
     }
   };
@@ -111,9 +121,6 @@ const HomePage = () => {
   const setHistoryHandler = (route) => {
     originRef.current.value = route.origin;
     destinationRef.current.value = route.destination;
-  };
-  const animationHandler = () => {
-    setIsAnimating(true);
   };
 
   return (
@@ -168,17 +175,16 @@ const HomePage = () => {
               {errorMessage !== "" && <ErrorText>{errorMessage}</ErrorText>}
             </HStack>
             <ButtonGroup alignSelf="flex-end" justifySelf="flex-end">
-              <div onClick={animationHandler}>
-                <Button
-                  colorScheme="pink"
-                  type="submit"
-                  onClick={calculateRoute}
-                  fontSize={{ base: "12px", md: "14px", lg: "16px" }}
-                  height={{ base: "32px", md: "28px", lg: "40px" }}
-                >
-                  Calculate Route
-                </Button>
-              </div>
+              <Button
+                colorScheme="pink"
+                type="submit"
+                onClick={calculateRoute}
+                fontSize={{ base: "12px", md: "14px", lg: "16px" }}
+                height={{ base: "32px", md: "28px", lg: "40px" }}
+              >
+                Calculate Route
+              </Button>
+
               <IconButton
                 size="sm"
                 fontSize={{ base: "12px", md: "14px", lg: "16px" }}
@@ -204,7 +210,7 @@ const HomePage = () => {
           >
             <Title>
               <h1>Search History</h1>
-              <FaSearchLocation />
+              <FaHistory />
             </Title>
             {routesStorage.slice(0, 5).map((route, index) => {
               return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Box, Flex, Text, Stack, } from "@chakra-ui/react";
+import { Box, Flex, Text, Stack } from "@chakra-ui/react";
 
 import Logo from "./Logo";
 
@@ -63,6 +63,7 @@ const MenuLinks = ({ isOpen }) => {
       flexBasis={{ base: "100%", md: "auto" }}
     >
       <Stack
+        fontSize={{ base: "1rem", md: "1.1rem", lg: "1.2rem" }}
         spacing={8}
         marginRight="20px"
         align="center"
