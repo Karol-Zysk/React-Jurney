@@ -8,11 +8,7 @@ import { Container } from "./App.style";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import NotFound from "./components/NotFound/NotFound";
 import { getLocalStorage, storeRoutes } from "./utils/storage";
-import {
-  emptyInputAlert,
-  ErrorAlert,
-  incorrectInputAlert,
-} from "./utils/errorsHandling";
+
 
 export const center = { lat: 48, lng: 3 };
 
@@ -42,7 +38,6 @@ function App() {
   //LOCALSTORAGE STATE
   const [routesStorage, setRoutesStorage] = useState([]);
 
-
   //GET LOCAL STORAGE DATA
   useEffect(() => {
     getLocalStorage(setRoutesStorage);
@@ -50,7 +45,7 @@ function App() {
 
   /*USING REFS INSTEAD OF USESTATE
    BECOUSE OF PROBLEMS WITH  <AUTOCOMPLETE> COMPONENT*/
-  
+
   /**@type React.MutableRefObject<HTMLInputElement>*/
   const originRef = useRef();
   /**@type React.MutableRefObject<HTMLInputElement>*/
@@ -59,6 +54,39 @@ function App() {
   if (!isLoaded) {
     return <Spinner>Loading...</Spinner>;
   }
+
+  const emptyInputAlert = () => {
+    setErrorMessage("No Empty Inputs !");
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3500);
+    clearTimeout();
+  };
+
+  const incorrectInputAlert = () => {
+    setErrorMessage("Not to long jurney?");
+
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3500);
+    clearTimeout();
+  };
+
+  const ErrorAlert = (error) => {
+    if (error === "NOT_FOUND") {
+      setErrorMessage("Incorrect Value !");
+    } else if (error === "ZERO_RESULTS") {
+      setErrorMessage("Your Car can't fly!");
+    } else if (error === "MAX_ROUTE_LENGTH_EXCEEDED") {
+      setErrorMessage("Too Long Jurney !");
+    } else {
+      setErrorMessage("Something Went wrong !");
+    }
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3500);
+    clearTimeout();
+  };
 
   const calculateRoute = async () => {
     if (originRef.current.value === "" || destinationRef.current.value === "") {
