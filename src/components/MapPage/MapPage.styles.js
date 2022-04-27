@@ -11,14 +11,14 @@ export const Container = styled.div`
 `;
 
 export const TextWrapper = styled.div`
-  margin-bottom: 25px;
+  margin-bottom: 1.5rem;
   display: ${({ minimize }) => (minimize ? "block" : "none")};
 `;
 
 export const InfoContainer = styled.div`
   border: 2px solid rgba(0, 0, 0, 0.25);
   padding: ${({ minimize }) => (minimize ? "15px" : "8px")};
-  margin: 15px;
+  margin: 1rem;
   display: flex;
   flex-direction: column;
   background: rgba(255, 255, 255, 0.95);
@@ -27,7 +27,7 @@ export const InfoContainer = styled.div`
   top: 0;
   max-width: 30%;
   font-weight: 300;
-  border-radius: 15px;
+  border-radius: 1rem;
   @media screen and (max-width: 1024px) {
     max-width: 45%;
     font-size: 0.9rem;
@@ -49,11 +49,11 @@ export const TitleWrapper = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 20px;
+  font-size: 1.3rem;
   font-weight: bold;
   margin-right: ${({ minimize }) => (minimize ? "0" : "20px")};
   @media screen and (max-width: 768px) {
-    font-size: 16px;
+    font-size: 1.1rem;
   }
 `;
 
@@ -71,6 +71,6 @@ export const ExportWrapper = styled.div`
 export const PdfIcon = styled(FaRegFilePdf)`
   display: inline-block;
   transform: scale(1.3);
-  margin-left: 10px;
+  margin-left: 0.6rem;
   cursor: pointer;
 `;

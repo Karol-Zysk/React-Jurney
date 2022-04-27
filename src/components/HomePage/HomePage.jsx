@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { MapRouteContext } from "../../context/context";
 import {
   Container,
   ErrorMsgBtnContainer,
@@ -15,6 +17,8 @@ import {
 import { FaTimes, FaSearchLocation, FaMapMarkedAlt } from "react-icons/fa";
 import { Autocomplete } from "@react-google-maps/api";
 import place from "../../img/place.svg";
+import { getLocalStorage } from "../../utils/storage";
+
 import {
   Box,
   Button,
@@ -23,16 +27,111 @@ import {
   IconButton,
   Input,
 } from "@chakra-ui/react";
+import { storeRoutes } from "../../utils/storage";
 
-const HomePage = ({
-  originRef,
-  destinationRef,
-  calculateRoute,
-  clearRoute,
-  errorMessage,
-  routesStorage,
-}) => {
+const HomePage = () => {
+  let {
+    setOrigin,
+    setDestination,
+    setDistance,
+    setDurationTxt,
+    directionResponse,
+    setDirectionResponse,
+  } = useContext(MapRouteContext);
+
+  
+
+  let navigate = useNavigate();
+
+  //ERROR HANDLING STATE
+  const [errorMessage, setErrorMessage] = useState("");
+
+  
+  //ANIMATION PROP
   const [animation, setAnimation] = useState(false);
+  
+  //GET LOCAL STORAGE DATA
+  const [routesStorage, setRoutesStorage] = useState([]);
+  useEffect(() => {
+    getLocalStorage(setRoutesStorage);
+  }, [directionResponse, navigate]);
+
+  //SETTING MAP FOR GOOGLEMAP COMPONENT
+
+  
+
+
+  /*USING REFS INSTEAD OF USESTATE
+    BECOUSE OF PROBLEMS WITH  <AUTOCOMPLETE> COMPONENT*/
+
+  /**@type React.MutableRefObject<HTMLInputElement>*/
+  const originRef = useRef();
+  /**@type React.MutableRefObject<HTMLInputElement>*/
+  const destinationRef = useRef();
+
+  
+  //ERROR HANDLING
+  const incorrectInputAlert = () => {
+    if (originRef.current.value === "" || destinationRef.current.value === "") {
+      setErrorMessage("No Empty Inputs !");
+      return;
+    } else if (originRef.current.value === destinationRef.current.value) {
+      setErrorMessage("Try diffrent directions");
+      return;
+    }
+    return;
+  };
+
+  const ErrorAlert = (error) => {
+    if (error === "NOT_FOUND") {
+      setErrorMessage("Incorrect Value !");
+    } else if (error === "ZERO_RESULTS") {
+      setErrorMessage("Your Car can't fly!");
+    } else if (error === "MAX_ROUTE_LENGTH_EXCEEDED") {
+      setErrorMessage("Too Long Jurney !");
+    } else {
+      setErrorMessage("Something Went wrong !");
+    }
+  };
+
+  //
+  const calculateRoute = async () => {
+    // eslint-disable-next-line no-undef
+    const directionService = new google.maps.DirectionsService();
+    // eslint-disable-next-line no-undef
+    try {
+      const results = await directionService.route({
+        origin: originRef.current.value,
+        destination: destinationRef.current.value,
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode.DRIVING,
+      });
+      incorrectInputAlert();
+      //SETTING GOOGLEMAP DIRECTION RESULTS
+      setOrigin(originRef.current.value);
+      setDestination(destinationRef.current.value);
+      setDirectionResponse(results);
+      setDistance(results.routes[0].legs[0].distance.value);
+      setDurationTxt(results.routes[0].legs[0].duration.text);
+
+      if (results) {
+        storeRoutes(originRef, destinationRef);
+        navigate("/map");
+      }
+    } catch (error) {
+      ErrorAlert(error.code, setErrorMessage);
+    }
+  };
+
+  const clearRoute = () => {
+    setDirectionResponse(null);
+    setDistance("");
+    setDurationTxt("");
+    setDestination("");
+    setOrigin("");
+    originRef.current.value = "";
+    destinationRef.current.value = "";
+  };
 
   // Filling inputs when History tab clicked
   const setHistoryHandler = (route) => {
@@ -41,10 +140,6 @@ const HomePage = ({
   };
   const animationHandler = () => {
     setAnimation(true);
-    setTimeout(() => {
-      setAnimation(false);
-    }, 3000);
-    clearTimeout();
   };
 
   return (

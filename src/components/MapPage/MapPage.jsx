@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { MapRouteContext } from "../../context/context";
 import { GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api";
 import {
   Container,
@@ -22,22 +23,24 @@ import {
 import { FiMinimize2, FiMaximize2 } from "react-icons/fi";
 import { jsPDF } from "jspdf";
 import img from "../../img/map.png";
-import { cost, howLong } from "../../utils/mapCalculations";
+import { cost, howLong } from "../../utils/utils";
 import { createPdf } from "../../utils/createPdf";
 
-const MapPage = ({
-  setMap,
-  directionResponse,
-  distance,
-  origin,
-  destination,
-  durationtxt,
-}) => {
+const MapPage = ({ map, setMap }) => {
+  let {
+    origin,
+    destination,
+    distance,
+    durationtxt,
+    directionResponse,
+  } = useContext(MapRouteContext);
+
   const [minimize, setMinimize] = useState(false);
   const [consumption, setConsumption] = useState("");
   const [fuelPrice, setFuelPrice] = useState("");
-  const distanceKM = distance / 1000;
 
+  //CALCULATING JURNEY VALUES
+  const distanceKM = distance / 1000;
   let howManyDays = howLong(distance);
   let jurneyPrice = cost(fuelPrice, consumption, distance);
   let createPdfHandler = () => {
