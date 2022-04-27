@@ -8,7 +8,7 @@ import { Container } from "./App.style";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import NotFound from "./components/NotFound/NotFound";
 import { getLocalStorage, storeRoutes } from "./utils/storage";
-
+// import {MapRouteContext} from './context/context'
 
 export const center = { lat: 48, lng: 3 };
 
@@ -55,21 +55,15 @@ function App() {
     return <Spinner>Loading...</Spinner>;
   }
 
-  const emptyInputAlert = () => {
-    setErrorMessage("No Empty Inputs !");
-    setTimeout(() => {
-      setErrorMessage("");
-    }, 3500);
-    clearTimeout();
-  };
-
   const incorrectInputAlert = () => {
-    setErrorMessage("Not to long jurney?");
-
-    setTimeout(() => {
-      setErrorMessage("");
-    }, 3500);
-    clearTimeout();
+    if (originRef.current.value === "" || destinationRef.current.value === "") {
+      setErrorMessage("No Empty Inputs !");
+      return;
+    } else if (originRef.current.value === destinationRef.current.value) {
+      setErrorMessage("Try diffrent directions");
+      return;
+    }
+    return;
   };
 
   const ErrorAlert = (error) => {
@@ -82,17 +76,9 @@ function App() {
     } else {
       setErrorMessage("Something Went wrong !");
     }
-    setTimeout(() => {
-      setErrorMessage("");
-    }, 3500);
-    clearTimeout();
   };
 
   const calculateRoute = async () => {
-    if (originRef.current.value === "" || destinationRef.current.value === "") {
-      emptyInputAlert(setErrorMessage);
-      return;
-    }
     // eslint-disable-next-line no-undef
     const directionService = new google.maps.DirectionsService();
     // eslint-disable-next-line no-undef
@@ -103,17 +89,14 @@ function App() {
         // eslint-disable-next-line no-undef
         travelMode: google.maps.TravelMode.DRIVING,
       });
-      if (originRef.current.value === destinationRef.current.value) {
-        incorrectInputAlert(setErrorMessage);
-        return;
-      } else {
-        setOrigin(originRef.current.value);
-        setDestination(destinationRef.current.value);
-        setDirectionResponse(results);
-        setDistance(results.routes[0].legs[0].distance.value);
-        setDuration(results.routes[0].legs[0].duration.value);
-        setDurationTxt(results.routes[0].legs[0].duration.text);
-      }
+      incorrectInputAlert();
+      setOrigin(originRef.current.value);
+      setDestination(destinationRef.current.value);
+      setDirectionResponse(results);
+      setDistance(results.routes[0].legs[0].distance.value);
+      setDuration(results.routes[0].legs[0].duration.value);
+      setDurationTxt(results.routes[0].legs[0].duration.text);
+
       if (results) {
         storeRoutes(originRef, destinationRef);
         setTimeout(() => {
