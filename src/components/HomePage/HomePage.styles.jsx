@@ -9,7 +9,7 @@ export const Container = styled.div`
   background: rgba(0, 176, 255, 0.04);
   @media screen and (max-width: 768px) {
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 88vh;
     height: auto;
   }
 `;
