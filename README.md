@@ -10,3 +10,7 @@
 <img src="https://img.shields.io/badge/-RestAPI-green" alt="RestAPI"/><img src="https://img.shields.io/badge/-jsPDF-green" alt="jsPDF"/>
 <img src="https://img.shields.io/badge/-ChakraUI-red" alt="ChakraUI"/><img src="https://img.shields.io/badge/-GoogleMapsAPI-red" alt="GoogleMaps"/></p>
 
+live: https://admirable-mochi-c1e6c8.netlify.app/
+				<br></br>
+<img src="https://fv9-6.failiem.lv/thumb_show.php?i=kxswurm77&view" target="_blank" alt="Maps"/>
+
