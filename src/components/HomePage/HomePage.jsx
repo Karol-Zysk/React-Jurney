@@ -9,17 +9,12 @@ import {
   ContentWrapper,
   Place,
   ImgWrapper,
-  ImgWrapperTitle,
+  Inputs,
   Route,
   SearchIco,
   Title,
 } from "./HomePage.styles";
-import {
-  FaTimes,
-  FaSearchLocation,
-  FaMapMarkedAlt,
-  FaHistory,
-} from "react-icons/fa";
+import { FaTimes, FaMapMarkedAlt, FaHistory } from "react-icons/fa";
 import { Autocomplete } from "@react-google-maps/api";
 import place from "../../img/place.svg";
 import { getLocalStorage } from "../../utils/storage";
@@ -150,7 +145,7 @@ const HomePage = () => {
             <h1>Set The Route</h1>
             <FaMapMarkedAlt />
           </Title>
-          <HStack spacing={4} marginBottom="15px">
+          <Inputs>
             <Autocomplete>
               <Input
                 id="origin"
@@ -176,7 +171,7 @@ const HomePage = () => {
                 height={{ base: "32px", md: "28px", lg: "40px" }}
               />
             </Autocomplete>
-          </HStack>
+          </Inputs>
           <ErrorMsgBtnContainer>
             <HStack>
               {errorMessage !== "" && <ErrorText>{errorMessage}</ErrorText>}
@@ -241,10 +236,6 @@ const HomePage = () => {
       </ContentWrapper>
       <ImgWrapper>
         {isAnimating && <SearchIco />}
-        <ImgWrapperTitle>
-          <p>Find Your Path</p>
-          <FaSearchLocation />
-        </ImgWrapperTitle>
         <Image src={place} />
       </ImgWrapper>
     </Container>

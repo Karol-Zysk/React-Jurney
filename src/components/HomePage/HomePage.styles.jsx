@@ -27,6 +27,13 @@ export const ContentWrapper = styled.div`
   }
 `;
 
+export const Inputs = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 2%;
+  margin-bottom: 1rem;
+`;
+
 export const ErrorMsgBtnContainer = styled.div`
   display: flex;
   width: 100%;
@@ -50,6 +57,7 @@ export const ImgWrapper = styled.div`
   position: relative;
   padding-top: 5vh;
   align-items: center;
+  justify-content: center;
   order: 1;
   @media screen and (max-width: 768px) {
     width: 100%;
@@ -141,8 +149,8 @@ export const Title = styled.div`
 export const Route = styled.div`
   display: flex;
   justify-content: center;
-  padding-bottom: 0.3rem;
-  padding-top: 0.3rem;
+  padding-bottom: 0.2rem;
+  padding-top: 0.2rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
   color: rgba(0, 0, 0, 0.8);
@@ -168,7 +176,7 @@ export const Place = styled.div`
   }
 
   p {
-    font-size: 1rem;
+    font-size: 0.9rem;
     @media screen and (max-width: 768px) {
       font-size: 0.8rem;
     }

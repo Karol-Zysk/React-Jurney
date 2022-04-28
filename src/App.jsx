@@ -21,7 +21,7 @@ function App() {
   });
 
   if (!isLoaded) {
-    return <Spinner>Loading...</Spinner>;
+    return <Spinner />;
   }
 
   return (
